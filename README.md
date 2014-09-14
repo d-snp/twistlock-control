@@ -1,12 +1,12 @@
-# Twistlock::Control::Models
+# TwistlockControl
 
-The models for the Twistlock Control system.
+The Twistlock Control system.
 
 ## Installation
 
 Add this line to your application's Gemfile:
 
-    gem 'twistlock-control-models'
+    gem 'twistlock-control'
 
 And then execute:
 
@@ -14,7 +14,7 @@ And then execute:
 
 Or install it yourself as:
 
-    $ gem install twistlock-control-models
+    $ gem install twistlock-control
 
 ## Usage
 
