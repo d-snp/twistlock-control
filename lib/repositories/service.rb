@@ -1,7 +1,7 @@
 module TwistlockControl
-	class ApplicationRepository < Repository
+	class ServiceRepository < Repository
 		def self.table_name
-			'applications'
+			'services'
 		end
 	end
 end
