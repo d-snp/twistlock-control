@@ -20,6 +20,12 @@ module TwistlockControl
 			end
 		end
 
+		def self.find_with_ids(ids)
+			with_connection do |conn|
+				table.get_all(*ids).run(conn)
+			end
+		end
+
 		def self.remove(id)
 			with_connection do |conn|
 				table.get(id).delete.run(conn)
