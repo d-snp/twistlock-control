@@ -13,4 +13,21 @@ describe TwistlockControl::Application do
         retrieved = TwistlockControl::Application.find_by_id(app.id)
         expect(retrieved).to eq(app)
     end
+
+    it "can get a list of applications" do
+        (1..3).each do |i|
+            app = TwistlockControl::Application.new(name: "App#{i}")
+            app.save
+        end
+        retrieved = TwistlockControl::Application.all
+        expect(retrieved.length).to eq(3)
+    end
+
+    it "can remove applications" do
+        app = TwistlockControl::Application.new(name: 'MyName')
+        app.save
+        app.remove
+        app = TwistlockControl::Application.find_by_id(app.id)
+        expect(app).to be_nil
+    end
 end

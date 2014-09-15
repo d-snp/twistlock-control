@@ -5,25 +5,18 @@ TwistlockControl.configure do |c|
 end
 
 
-Spec::Runner.configure do |config|
+RSpec::Runner.configure do |config|
 	config.before(:all) {
-		TwistlockControl.with_connection do |conn|
-			#RethinkDB::RQL.new().db_drop(TwistlockControl.database_name)
-			begin
-			TwistlockControl.database.table_create('applications').run(conn)
-			rescue
-			end
-		end
+		TwistlockControl::ApplicationRepository.create_table
+		TwistlockControl::ProvisionerRepository.create_table
 	}
 	config.before(:each) {
 		TwistlockControl.with_connection do |conn|
 			TwistlockControl.database.table('applications').delete.run(conn)
+			TwistlockControl.database.table('provisioners').delete.run(conn)
 		end
 	}
 	config.after(:all) {
-		TwistlockControl.with_connection do |conn|
-			#RethinkDB::RQL.new().db_drop(TwistlockControl.database_name)
-		end
 	}
 	config.after(:each) {
 	}
