@@ -30,4 +30,13 @@ describe TwistlockControl::Application do
         app = TwistlockControl::Application.find_by_id(app.id)
         expect(app).to be_nil
     end
+
+    it "should not somehow get confused with other tables" do
+        app = TwistlockControl::Application.new(name: 'MyName')
+        app.save
+        prov = TwistlockControl::Provisioner.new(name: 'MyName')
+        prov.save
+        expect(TwistlockControl::Application.all.length).to be(1)
+        expect(TwistlockControl::Provisioner.all.length).to be(1)
+    end
 end
