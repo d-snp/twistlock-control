@@ -8,8 +8,11 @@ end
 Spec::Runner.configure do |config|
 	config.before(:all) {
 		TwistlockControl.with_connection do |conn|
-			RethinkDB::RQL.new().db_drop(TwistlockControl.database_name)
+			#RethinkDB::RQL.new().db_drop(TwistlockControl.database_name)
+			begin
 			TwistlockControl.database.table_create('applications').run(conn)
+			rescue
+			end
 		end
 	}
 	config.before(:each) {
@@ -19,7 +22,7 @@ Spec::Runner.configure do |config|
 	}
 	config.after(:all) {
 		TwistlockControl.with_connection do |conn|
-			RethinkDB::RQL.new().db_drop(TwistlockControl.database_name)
+			#RethinkDB::RQL.new().db_drop(TwistlockControl.database_name)
 		end
 	}
 	config.after(:each) {
