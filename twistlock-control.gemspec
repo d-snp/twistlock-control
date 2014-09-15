@@ -24,6 +24,7 @@ Gem::Specification.new do |spec|
 
   {
 	"rethinkdb" => nil,
+	"connection_pool" => nil,
     "virtus" => nil
   }.each { |k,v| spec.add_dependency(k,v)}
 end
