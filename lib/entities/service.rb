@@ -3,6 +3,7 @@ module TwistlockControl
 		attribute :id, String, :default => :generate_id
 		attribute :name, String
 		attribute :service_ids, Array[String]
+		attribute :container_ids, Array[String]
 
 		def generate_id
 			name.downcase.gsub(' ','-')
@@ -15,6 +16,15 @@ module TwistlockControl
 
 		def services
 			Service.find_with_ids(service_ids)
+		end
+
+		def add_container(container)
+			container_ids << container.id
+			save
+		end
+
+		def containers
+			Container.find_with_ids(container_ids)
 		end
 
 		def save

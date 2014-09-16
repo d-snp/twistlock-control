@@ -4,10 +4,12 @@ require 'rethinkdb'
 require 'entity'
 require 'entities/provisioner'
 require 'entities/service'
+require 'entities/container'
 
 require 'repository'
 require 'repositories/provisioner'
 require 'repositories/service'
+require 'repositories/container'
 
 module TwistlockControl
 	class << self

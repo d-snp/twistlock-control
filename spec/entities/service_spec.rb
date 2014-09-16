@@ -10,6 +10,16 @@ describe TwistlockControl::Service do
         expect(app.services).to include(service)
     end
 
+    it "can have containers added to it" do
+        container = TwistlockControl::Container.new(name: 'MyContainer')
+        container.save
+        app = TwistlockControl::Service.new(name: 'MyName')
+        app.save
+        app.add_container(container)
+        app = TwistlockControl::Service.find_by_id(app.id)
+        expect(app.containers).to include(container)
+    end
+
     it "can find a bunch of services by ids" do
         ids = []
         (1..3).each do |i|
