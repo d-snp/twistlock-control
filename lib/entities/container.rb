@@ -1,7 +1,9 @@
 require 'digest'
 
 module TwistlockControl
-	class ContainerDescription
+	class ContainerDescription < Entity
+		attribute :name, String
+		attribute :description, String
 	end
 
 	class Container < Entity
@@ -14,7 +16,9 @@ module TwistlockControl
 		end
 
 		def get_description
-			d = Provisioner.local.get_container_description(url)
+			if attrs = Provisioner.local.container_description(url)
+				@description = ContainerDescription.new(attrs)
+			end
 		end
 
 		def save

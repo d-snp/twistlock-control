@@ -1,6 +1,8 @@
 require 'connection_pool'
 require 'rethinkdb'
 
+require 'provisioner_api'
+
 require 'entity'
 require 'entities/provisioner'
 require 'entities/service'
