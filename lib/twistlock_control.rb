@@ -15,6 +15,7 @@ module TwistlockControl
 	class << self
 		attr_accessor :connection_pool_size, :connection_pool_timeout,
 			:rethinkdb_host, :rethinkdb_port, :database_name
+		
 
 		def configure
 			yield self

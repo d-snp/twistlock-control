@@ -1,3 +1,5 @@
+require 'spec_helper'
+
 describe TwistlockControl::Service do
     it "can be created and added to an service" do
         service = TwistlockControl::Service.new(name: 'MyService')
@@ -11,7 +13,7 @@ describe TwistlockControl::Service do
     end
 
     it "can have containers added to it" do
-        container = TwistlockControl::Container.new(name: 'MyContainer')
+        container = TwistlockControl::Container.new(name: 'MyContainer', url: 'someUrl')
         container.save
         app = TwistlockControl::Service.new(name: 'MyName')
         app.save
@@ -64,7 +66,7 @@ describe TwistlockControl::Service do
     it "should not somehow get confused with other tables" do
         app = TwistlockControl::Service.new(name: 'MyName')
         app.save
-        prov = TwistlockControl::Provisioner.new(name: 'MyName')
+        prov = TwistlockControl::Provisioner.new(name: 'MyName', url: "someUrl")
         prov.save
         expect(TwistlockControl::Service.all.length).to be(1)
         expect(TwistlockControl::Provisioner.all.length).to be(1)

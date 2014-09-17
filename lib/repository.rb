@@ -16,7 +16,13 @@ module TwistlockControl
 
 		def self.find_by_id(id)
 			with_connection do |conn|
-				table.get(id).run(conn)	
+				table.get(id).run(conn)
+			end
+		end
+
+		def self.find_by_attributes(attrs)
+			with_connection do |conn|
+				table.filter(attrs).limit(1).run(conn).first	
 			end
 		end
 

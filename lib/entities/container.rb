@@ -1,11 +1,20 @@
+require 'digest'
+
 module TwistlockControl
+	class ContainerDescription
+	end
+
 	class Container < Entity
 		attribute :id, String, :default => :generate_id
-		attribute :name, String
 		attribute :url, String
+		attribute :description, ContainerDescription
 
 		def generate_id
-			name.downcase.gsub(' ','-')
+			Digest::SHA256.hexdigest(url)
+		end
+
+		def get_description
+			d = Provisioner.local.get_container_description(url)
 		end
 
 		def save

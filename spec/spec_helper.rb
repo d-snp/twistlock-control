@@ -4,7 +4,7 @@ TwistlockControl.configure do |c|
 	c.database_name = 'test'
 end
 
-RSpec::Runner.configure do |config|
+RSpec.configure do |config|
 	config.before(:all) {
 		TwistlockControl::ProvisionerRepository.create_table
 		TwistlockControl::ServiceRepository.create_table

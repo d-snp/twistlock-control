@@ -2,13 +2,13 @@ require 'spec_helper'
 
 describe TwistlockControl::Provisioner do
     it "can be initialized from its attributes" do
-        prov = TwistlockControl::Provisioner.new(name: 'MyName')
+        prov = TwistlockControl::Provisioner.new(name: 'MyName', url: 'url')
         expect(prov.respond_to? :name).to be(true)
         expect(prov.name).to eq('MyName')
     end
 
     it "can be persisted and retrieved from the database" do
-        prov = TwistlockControl::Provisioner.new(name: 'MyName')
+        prov = TwistlockControl::Provisioner.new(name: 'MyName', url: 'url')
         prov.save
         retrieved = TwistlockControl::Provisioner.find_by_id(prov.id)
         expect(retrieved).to eq(prov)
@@ -16,7 +16,7 @@ describe TwistlockControl::Provisioner do
 
     it "can get a list of provisioners" do
         (1..3).each do |i|
-            prov = TwistlockControl::Provisioner.new(name: "Prov#{i}")
+            prov = TwistlockControl::Provisioner.new(name: "Prov#{i}", url: "url#{i}")
             prov.save
         end
         retrieved = TwistlockControl::Provisioner.all
@@ -24,7 +24,7 @@ describe TwistlockControl::Provisioner do
     end
 
     it "can remove provisioners" do
-        prov = TwistlockControl::Provisioner.new(name: 'MyName')
+        prov = TwistlockControl::Provisioner.new(name: 'MyName', url: 'url')
         prov.save
         prov.remove
         prov = TwistlockControl::Provisioner.find_by_id(prov.id)
