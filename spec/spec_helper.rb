@@ -1,4 +1,5 @@
 require 'twistlock_control'
+require 'webmock/rspec'
 
 TwistlockControl.configure do |c|
 	c.database_name = 'test'

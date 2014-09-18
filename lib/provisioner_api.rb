@@ -1,3 +1,4 @@
+require 'net/http'
 module TwistlockControl
 	class ProvisionerAPI
 		attr_reader :url
@@ -7,7 +8,12 @@ module TwistlockControl
 		end
 
 		def container_description(container_url)
-			raise "not implemented"
+			JSON.parse get('templates')
+		end
+
+		private
+		def get(path)
+			Net::HTTP.get(url, '/' + path)
 		end
 	end
 end
