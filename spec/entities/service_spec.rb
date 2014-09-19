@@ -19,7 +19,7 @@ describe TwistlockControl::Service do
         app.save
         app.add_container(container)
         app = TwistlockControl::Service.find_by_id(app.id)
-        expect(app).map(&:container).to include(container)
+        expect(app.services.map(&:container)).to include(container)
     end
 
     it "can find a bunch of services by ids" do

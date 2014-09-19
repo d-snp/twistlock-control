@@ -9,6 +9,7 @@ module TwistlockControl
 	class Container < Entity
 		attribute :id, String, :default => :generate_id
 		attribute :url, String
+		attribute :name, String
 		attribute :description, ContainerDescription
 
 		def generate_id

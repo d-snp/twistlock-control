@@ -31,6 +31,15 @@ module TwistlockControl
 			save
 		end
 
+		def add_container(container, name=nil)
+			rel = ServiceRelation.new(
+				name: name ? name : container.name,
+				container_id: container.id
+			)
+			services.push rel
+			save
+		end
+
 		def save
 			attrs = self.attributes
 			service_attrs = services.map {|s|s.attributes}
