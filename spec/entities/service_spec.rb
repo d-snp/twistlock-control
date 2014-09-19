@@ -7,9 +7,9 @@ describe TwistlockControl::Service do
         app = TwistlockControl::Service.new(name: 'MyName')
         app.save
         app.add_service(service)
-        expect(app.services).to include(service)
+        expect(app.services.map(&:service)).to include(service)
         app = TwistlockControl::Service.find_by_id(app.id)
-        expect(app.services).to include(service)
+        expect(app.services.map(&:service)).to include(service)
     end
 
     it "can have containers added to it" do
@@ -19,7 +19,7 @@ describe TwistlockControl::Service do
         app.save
         app.add_container(container)
         app = TwistlockControl::Service.find_by_id(app.id)
-        expect(app.containers).to include(container)
+        expect(app).map(&:container).to include(container)
     end
 
     it "can find a bunch of services by ids" do
