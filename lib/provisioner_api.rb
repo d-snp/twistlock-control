@@ -7,8 +7,8 @@ module TwistlockControl
 			@url = url
 		end
 
-		def container_description(container_url)
-			JSON.parse get('templates')
+		def container_description(name)
+			JSON.parse get("templates/#{name}")
 		end
 
 		private

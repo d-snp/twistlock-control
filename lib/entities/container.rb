@@ -17,7 +17,7 @@ module TwistlockControl
 		end
 
 		def get_description
-			if attrs = Provisioner.local.container_description(url)
+			if attrs = Provisioner.local.container_description(name)
 				@description = ContainerDescription.new(attrs)
 			end
 		end

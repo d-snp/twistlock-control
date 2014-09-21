@@ -13,8 +13,8 @@ module TwistlockControl
 			end
 		end
 
-		def container_description(url)
-			api.container_description(url)
+		def container_description(name)
+			api.container_description(name)
 		end
 
 		def generate_id
