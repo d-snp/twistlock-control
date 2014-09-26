@@ -4,7 +4,7 @@ module TwistlockControl
 	describe ProvisionerAPI do
 		attr_reader :api
 		before :all do
-			@api = ProvisionerAPI.new("localhost:3000")
+			@api = ProvisionerAPI.new("http://localhost:3000")
 		end
 		describe '#container_description' do
 			before :all do
@@ -19,8 +19,17 @@ module TwistlockControl
 			end
 		end
 
-		describe '#download_container' do
-			it 'should issue a download container request to the api'
+		describe '#add_container' do
+			before :all do
+				stub_request(:post, api.url + '/templates').to_return do |r|
+					{body: {status: 'ok'}.to_json}
+				end
+			end
+
+			it 'should issue an add container request to the api' do
+				result = api.add_container('redis', 'git@github.com:d-snp/redis-container.git')
+				expect(result['status']).to eq('ok')
+			end
 		end
 	end
 end
