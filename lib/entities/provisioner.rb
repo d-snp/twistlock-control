@@ -5,13 +5,6 @@ module TwistlockControl
 		attribute :id, String, :default => :generate_id
 		attribute :name, String
 		attribute :url, String
-		attribute :local, Boolean
-
-		def self.local
-			if attrs = repository.find_by_attributes(local: true)
-				new(attrs)
-			end
-		end
 
 		def container_description(name)
 			api.container_description(name)

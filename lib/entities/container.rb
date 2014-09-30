@@ -1,9 +1,24 @@
 require 'digest'
+require 'securerandom'
+require 'fileutils'
+require 'yaml'
 
 module TwistlockControl
 	class ContainerDescription < Entity
 		attribute :name, String
 		attribute :description, String
+
+		def self.fetch(container)
+			nonce = SecureRandom.hex[0..7]
+			dirname = "/tmp/#{container.name}-#{nonce}"
+			FileUtils.mkdir_p dirname
+			Dir.chdir(dirname) do
+				`git clone -n --depth=1 #{container.url} .`
+				`git checkout HEAD twistlock.yml`
+				result = `cat twistlock.yml && rm -rf #{dirname}`
+				new(YAML.load(result))
+			end
+		end
 	end
 
 	class Container < Entity
@@ -17,9 +32,7 @@ module TwistlockControl
 		end
 
 		def get_description
-			if attrs = Provisioner.local.container_description(name)
-				@description = ContainerDescription.new(attrs)
-			end
+			@description = ContainerDescription.fetch(self)
 		end
 
 		def save
