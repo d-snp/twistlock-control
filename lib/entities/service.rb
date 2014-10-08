@@ -18,6 +18,7 @@ module TwistlockControl
 		attribute :name, String
 		attribute :services, [ServiceRelation]
 		attribute :provided_services, Hash[String => Hash[String => String]]
+		attribute :links, Array[[Hash[String => String],Hash[String => String]]]
 
 		def generate_id
 			name.downcase.gsub(' ','-')
@@ -41,8 +42,13 @@ module TwistlockControl
 			save
 		end
 
-		def expose(provided_service_name, service_name, port_name)
-			provided_services[provided_service_name] = {service_name => port_name}
+		def expose(provided_service_name, service)
+			provided_services[provided_service_name] = service
+			save
+		end
+
+		def link(provided_service, consumed_service)
+			links.push [provided_service, consumed_service]
 			save
 		end
 

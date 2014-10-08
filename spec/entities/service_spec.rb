@@ -33,10 +33,19 @@ describe TwistlockControl::Service do
 
         it "can expose a port exposed by a service" do
             # expose the redis provided service of the the redis container as 'redis'
-            @app.expose('redis', 'redis', 'redis')
-            exposed = @app.provided_services['redis']
+            @app.expose('redis', 'redis' => 'redis')
+            app = TwistlockControl::Service.find_by_id(@app.id)
+            exposed = app.provided_services['redis']
             expect(exposed).to_not be_nil
             expect(exposed).to eq('redis' => 'redis')
+        end
+
+        it "can link two containers together" do
+            @app.link({'redis' => 'redis'}, {'other_app' => 'redis'})
+            app = TwistlockControl::Service.find_by_id(@app.id)
+            link = app.links[0]
+            expect(link).to_not be_nil
+            expect(link).to eq([{'redis' => 'redis'}, {'other_app' => 'redis'}])
         end
     end
 
