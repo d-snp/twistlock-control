@@ -17,6 +17,7 @@ module TwistlockControl
 		attribute :id, String, :default => :generate_id
 		attribute :name, String
 		attribute :services, [ServiceRelation]
+		attribute :provided_services, Hash[String => Hash[String => String]]
 
 		def generate_id
 			name.downcase.gsub(' ','-')
@@ -37,6 +38,11 @@ module TwistlockControl
 				container_id: container.id
 			)
 			services.push rel
+			save
+		end
+
+		def expose(provided_service_name, service_name, port_name)
+			provided_services[provided_service_name] = {service_name => port_name}
 			save
 		end
 

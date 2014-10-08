@@ -22,6 +22,24 @@ describe TwistlockControl::Service do
         expect(app.services.map(&:container)).to include(container)
     end
 
+    describe "service exposed resources" do
+        before :each do
+            @container = TwistlockControl::Container.new(name: 'redis', url: 'git@github.com:d-snp/redis-container.git')
+            @container.save
+            @app = TwistlockControl::Service.new(name: 'Redis')
+            @app.save
+            @app.add_container(@container)
+        end
+
+        it "can expose a port exposed by a service" do
+            # expose the redis provided service of the the redis container as 'redis'
+            @app.expose('redis', 'redis', 'redis')
+            exposed = @app.provided_services['redis']
+            expect(exposed).to_not be_nil
+            expect(exposed).to eq('redis' => 'redis')
+        end
+    end
+
     it "can find a bunch of services by ids" do
         ids = []
         (1..3).each do |i|
