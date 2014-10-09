@@ -1,7 +1,10 @@
 require 'spec_helper'
+require 'entities/shared_service_specs'
 
 module TwistlockControl
 	describe Container do
+		it_should_behave_like "a service"
+
 		attr_reader :container
 
 		before :each do

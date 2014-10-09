@@ -13,12 +13,10 @@ module TwistlockControl
 		end
 	end
 
-	class Service < Entity
+	class Service < ServiceBase
 		attribute :id, String, :default => :generate_id
 		attribute :name, String
 		attribute :services, [ServiceRelation]
-		attribute :provided_services, Hash[String => Hash[String => String]]
-		attribute :links, Array[[Hash[String => String],Hash[String => String]]]
 
 		def generate_id
 			name.downcase.gsub(' ','-')
@@ -31,6 +29,9 @@ module TwistlockControl
 			)
 			services.push rel
 			save
+		end
+
+		def add_mount()
 		end
 
 		def add_container(container, name=nil)

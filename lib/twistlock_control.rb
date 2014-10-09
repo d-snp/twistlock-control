@@ -4,6 +4,7 @@ require 'rethinkdb'
 require 'provisioner_api'
 
 require 'entity'
+require 'entities/service_base'
 require 'entities/provisioner'
 require 'entities/service'
 require 'entities/container'

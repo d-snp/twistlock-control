@@ -21,7 +21,7 @@ module TwistlockControl
 		end
 	end
 
-	class Container < Entity
+	class Container < ServiceBase
 		attribute :id, String, :default => :generate_id
 		attribute :url, String
 		attribute :name, String
