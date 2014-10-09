@@ -5,7 +5,8 @@ module TwistlockControl
 		attr_reader :container
 
 		before :each do
-			@container = Container.new(name: 'redis', url: 'git@github.com:d-snp/redis-container.git')
+			dir = Dir.pwd + '/../redis-container'
+			@container = Container.new(name: 'redis', url: dir)
 		end
 
 		it "should be able to get a description" do
