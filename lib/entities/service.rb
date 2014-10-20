@@ -4,6 +4,14 @@ module TwistlockControl
 		attribute :container_id, String
 		attribute :service_id, String
 
+		def is_a_container?
+			!container_id.nil?
+		end
+
+		def is_a_service?
+			!service_id.nil?
+		end
+
 		def container
 			Container.find_by_id(container_id)
 		end

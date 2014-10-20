@@ -3,6 +3,7 @@ require 'entities/shared_service_specs'
 
 describe TwistlockControl::Service do
     it_should_behave_like "a service"
+
     it "can be created and added to an service" do
         service = TwistlockControl::Service.new(name: 'MyService')
         service.save

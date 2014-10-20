@@ -1,6 +1,29 @@
 require 'spec_helper'
 
 describe TwistlockControl::Provisioner do
+    ##
+    # Hoe het wel moet..
+    # 
+    # Je kan van een service een instance maken. Van
+    # die instance kun je dan de 'rollen' enumeraten
+    # aan die rollen kun je dan provisioner configuraties
+    # koppelen.
+    # Daarna kun je op de service instance provision aanroepen.
+    # Service instance provision roept op alle rollen provision aan
+
+    it "can provision a service" do
+        service = TwistlockControl::Service.new(name: 'MyService')
+        container = TwistlockControl::Container.new(name: 'MyContainer', url: 'someUrl')
+        service.save
+        container.save
+        service.add_container(container)
+        prov = TwistlockControl::Provisioner.new(name: 'MyName', url: 'url')
+        api = double(TwistlockControl::ProvisionerAPI)
+        prov.stub(:api).and_return(api)
+        expect(api).to receive(:add_container).with('MyContainer', 'someUrl').and_return(true)
+        prov.provision(service)
+    end
+
     it "can be initialized from its attributes" do
         prov = TwistlockControl::Provisioner.new(name: 'MyName', url: 'url')
         expect(prov.respond_to? :name).to be(true)

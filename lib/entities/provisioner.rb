@@ -6,6 +6,20 @@ module TwistlockControl
 		attribute :name, String
 		attribute :url, String
 
+		def provision(service)
+			provision = lambda do |service_relation|
+				if service_relation.is_a_container?
+					container = service_relation.container
+					api.add_container(container.name, container.url)
+				else
+					s = service_relation.service
+					s.services.each {|sr| provision[sr]}
+				end
+			end
+
+			service.services.each { |sr| provision[sr] }
+		end
+
 		def container_description(name)
 			api.container_description(name)
 		end
