@@ -87,5 +87,9 @@ module TwistlockControl
 		def self.all()
 			ServiceRepository.all.map {|a| new(a) }
 		end
+
+		def containers
+			services.select(&:is_a_container?).map(&:container)
+		end
 	end
 end

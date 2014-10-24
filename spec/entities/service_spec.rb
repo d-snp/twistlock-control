@@ -74,23 +74,4 @@ describe TwistlockControl::Service do
         expect(TwistlockControl::Service.all.length).to be(1)
         expect(TwistlockControl::Provisioner.all.length).to be(1)
     end
-
-    describe "roles" do
-        # So the idea is that it's possible to enumerate the containers
-        # that are used in the entire service tree
-        #
-        # These roles can then be assigned to provision
-        # Perhaps the service relation class can encapsulate this
-        
-        # Information in a role:
-        #   - the service the role belongs to
-        #   - the multiplicity (like 0 or more, or just 1)
-        
-        # So to provision, the system would need the following info
-        # For each role:
-        #   - what provisioner(s) is it going to be provisioned on
-        #   - what settings will it be provisioned with
-        
-        # 
-    end
 end

@@ -7,6 +7,7 @@ require 'entity'
 require 'entities/service_base'
 require 'entities/provisioner'
 require 'entities/service'
+require 'entities/service_instance'
 require 'entities/container'
 
 require 'repository'
