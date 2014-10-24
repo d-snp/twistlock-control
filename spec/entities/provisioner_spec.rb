@@ -1,16 +1,7 @@
 require 'spec_helper'
 
 describe TwistlockControl::Provisioner do
-    ##
-    # Hoe het wel moet..
-    # 
-    # Je kan van een service een instance maken. Van
-    # die instance kun je dan de 'rollen' enumeraten
-    # aan die rollen kun je dan provisioner configuraties
-    # koppelen.
-    # Daarna kun je op de service instance provision aanroepen.
-    # Service instance provision roept op alle rollen provision aan
-
+    # todo rewrite this less naievely
     it "can provision a service" do
         service = TwistlockControl::Service.new(name: 'MyService')
         container = TwistlockControl::Container.new(name: 'MyContainer', url: 'someUrl')
