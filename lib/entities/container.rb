@@ -4,24 +4,8 @@ require 'fileutils'
 require 'yaml'
 
 module TwistlockControl
-	class ContainerDescription < Entity
-		attribute :name, String
-		attribute :description, String
-
-		def self.fetch(container)
-			nonce = SecureRandom.hex[0..7]
-			dirname = "/tmp/#{container.name}-#{nonce}"
-			FileUtils.mkdir_p dirname
-			Dir.chdir(dirname) do
-				`git clone -n --depth=1 #{container.url} .`
-				`git checkout HEAD twistlock.yml`
-				result = `cat twistlock.yml && rm -rf #{dirname}`
-				new(YAML.load(result))
-			end
-		end
-	end
-
-	class Container < ServiceBase
+	# A container is a service that can be provisioned on a Twistlock provisioner node.
+	class Container < Service
 		attribute :id, String, :default => :generate_id
 		attribute :url, String
 		attribute :name, String
@@ -57,6 +41,23 @@ module TwistlockControl
 
 		def self.all()
 			ContainerRepository.all.map {|a| new(a) }
+		end
+	end
+
+	class ContainerDescription < Entity
+		attribute :name, String
+		attribute :description, String
+
+		def self.fetch(container)
+			nonce = SecureRandom.hex[0..7]
+			dirname = "/tmp/#{container.name}-#{nonce}"
+			FileUtils.mkdir_p dirname
+			Dir.chdir(dirname) do
+				`git clone -n --depth=1 #{container.url} .`
+				`git checkout HEAD twistlock.yml`
+				result = `cat twistlock.yml && rm -rf #{dirname}`
+				new(YAML.load(result))
+			end
 		end
 	end
 end
