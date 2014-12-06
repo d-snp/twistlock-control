@@ -5,10 +5,14 @@ module TwistlockControl
 	# In the CompositeService you may choose to only expose the HTTP service, making it only possible
 	# to query the MySQL database through the Ruby application, which might be considered proper
 	# encapsulation.
+	#
+	# Relations between services are described by the links attribute.
 	class CompositeService < Service
 		attribute :id, String, :default => :generate_id
 		attribute :name, String
 		attribute :services, [ServiceRelation]
+
+		# TODO think of, describe and implement links attribute
 
 		def generate_id
 			name.downcase.gsub(' ','-')
