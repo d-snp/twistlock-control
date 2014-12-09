@@ -6,13 +6,13 @@ module TwistlockControl
 	# to query the MySQL database through the Ruby application, which might be considered proper
 	# encapsulation.
 	#
-	# Relations between services are described by the links attribute.
+	# Relations between services are described by the links attribute. A link is characterized by
+	# a producer and a consumer, the consumer will connect to the producers provided service.
 	class CompositeService < Service
 		attribute :id, String, :default => :generate_id
 		attribute :name, String
 		attribute :services, [ServiceRelation]
-
-		# TODO think of, describe and implement links attribute
+		attribute :links, [ServiceLink]
 
 		def generate_id
 			name.downcase.gsub(' ','-')
@@ -44,16 +44,23 @@ module TwistlockControl
 			save
 		end
 
-		def link(provided_service, consumed_service)
-			links.push [provided_service, consumed_service]
+		def link(provider, provider_service_name, consumer, consumer_service_name)
+			links.push ServiceLink.new(provider.name, provider_service_name,
+				consumer, consumer_service_name)
 			save
 		end
 
 		def save
+			ServiceRepository.save(serialize)
+		end
+
+		def serialize
 			attrs = self.attributes
 			service_attrs = services.map {|s|s.attributes}
+			links_attrs = links.map {|l|l.attributes}
 			attrs[:services] = service_attrs
-			ServiceRepository.save(attrs)
+			attrs[:links] = links_attrs
+			attrs
 		end
 
 		def remove
@@ -101,5 +108,12 @@ module TwistlockControl
 		def service
 			Service.find_by_id(service_id)
 		end
+	end
+
+	class ServiceLink < Entity
+		attribute :provider_name, String
+		attribute :consumer_name, String
+		attribute :provider_service_name, String
+		attribute :consumer_service_name, String
 	end
 end
