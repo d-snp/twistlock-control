@@ -1,14 +1,11 @@
 require 'spec_helper'
 
 describe TwistlockControl::Provisioner do
-    # todo rewrite this less naievely
-    it "can provision a service" do
+    it "can provision a container instance" do
         pending "implement provisioning properly"
-        service = TwistlockControl::CompositeService.new(name: 'MyService')
         container = TwistlockControl::Container.new(name: 'MyContainer', url: 'someUrl')
-        service.save
         container.save
-        service.add_service(container)
+        # make container instance
         prov = TwistlockControl::Provisioner.new(name: 'MyName', url: 'url')
         api = double(TwistlockControl::ProvisionerAPI)
         prov.stub(:api).and_return(api)

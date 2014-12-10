@@ -6,8 +6,13 @@ module TwistlockControl
 		attribute :name, String
 		attribute :url, String
 
-		def provision(service)
-			raise "TODO Implement provisioning"
+		def provision(container_instance)
+			# it must send the provision command,
+			# execute any links, mount any mounts
+			# and set any instance variables
+			# finally it should return the id of
+			# the provisioned container
+			raise "TODO implement provisioning"
 		end
 
 		def container_description(name)
