@@ -6,6 +6,7 @@ require 'yaml'
 module TwistlockControl
 	# A container is a service that can be provisioned on a Twistlock provisioner node.
 	class Container < Service
+		attribute :service_type, Symbol, :default => :container
 		attribute :id, String, :default => :generate_id
 		attribute :url, String
 		attribute :name, String
@@ -20,15 +21,15 @@ module TwistlockControl
 		end
 
 		def save
-			ContainerRepository.save(self.attributes)
+			ServiceRepository.save(self.attributes)
 		end
 
 		def remove
-			ContainerRepository.remove(id)
+			ServiceRepository.remove(id)
 		end
 
 		def self.find_by_id(id)
-			if attributes = ContainerRepository.find_by_id(id)
+			if attributes = ServiceRepository.find_by_id(id)
 				new(attributes)
 			else
 				nil
@@ -36,11 +37,11 @@ module TwistlockControl
 		end
 
 		def self.find_with_ids(ids)
-			ContainerRepository.find_with_ids(ids).map {|a| new(a) }
+			ServiceRepository.find_with_ids(ids).map {|a| new(a) }
 		end
 
 		def self.all()
-			ContainerRepository.all.map {|a| new(a) }
+			ServiceRepository.containers.map {|a| new(a) }
 		end
 	end
 

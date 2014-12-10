@@ -4,16 +4,15 @@ require 'rethinkdb'
 require 'provisioner_api'
 
 require 'entity'
-require 'entities/service_base'
-require 'entities/provisioner'
 require 'entities/service'
+require 'entities/provisioner'
+require 'entities/composite_service'
 require 'entities/service_instance'
 require 'entities/container'
 
 require 'repository'
 require 'repositories/provisioner'
 require 'repositories/service'
-require 'repositories/container'
 
 module TwistlockControl
 	class << self

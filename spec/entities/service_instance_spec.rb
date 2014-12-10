@@ -5,11 +5,11 @@ describe TwistlockControl::ServiceInstance do
 	# a service
 	describe "Creating a service instance" do
 		def make_service
-			service = TwistlockControl::Service.new(name: 'MyService')
+			service = TwistlockControl::CompositeService.new(name: 'MyService')
 			container = TwistlockControl::Container.new(name: 'MyContainer', url: 'someUrl')
 			service.save
 			container.save
-			service.add_container(container)
+			service.add_service(container)
 			service
 		end
 
