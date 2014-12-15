@@ -39,7 +39,7 @@ module TwistlockControl
 		attribute :service_id, String
 		attribute :configuration, Configuration
 
-		def self.create(service, name)
+		def self.create(name, service)
 			configuration = build_configuration(service)
 			instance = new(service_id: service.id, name: name, configuration: configuration)
 		end

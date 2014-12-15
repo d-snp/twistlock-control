@@ -10,9 +10,9 @@ describe TwistlockControl::CompositeService do
         app = TwistlockControl::CompositeService.new(name: 'MyName')
         app.save
         app.add_service(service)
-        expect(app.services.map(&:service)).to include(service)
+        expect(app.services).to include(service)
         app = TwistlockControl::CompositeService.find_by_id(app.id)
-        expect(app.services.map(&:service)).to include(service)
+        expect(app.services).to include(service)
     end
 
     it "can have containers added to it" do
@@ -22,7 +22,7 @@ describe TwistlockControl::CompositeService do
         app.save
         app.add_service(container)
         app = TwistlockControl::CompositeService.find_by_id(app.id)
-        expect(app.services.map(&:service)).to include(container)
+        expect(app.services).to include(container)
     end
 
     it "can link two containers together" do

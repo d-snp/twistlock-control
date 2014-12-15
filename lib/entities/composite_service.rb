@@ -27,8 +27,12 @@ module TwistlockControl
 		attribute :service_type, Symbol, :default => :composite
 		attribute :id, String, :default => :generate_id
 		attribute :name, String
-		attribute :services, [ServiceRelation]
+		attribute :service_relations, [ServiceRelation]
 		attribute :links, [ServiceLink]
+
+		def services
+			service_relations.map(&:service)
+		end
 
 		def generate_id
 			name.downcase.gsub(' ','-')
@@ -39,7 +43,7 @@ module TwistlockControl
 				name: name ? name : service.name,
 				service_id: service.id
 			)
-			services.push rel
+			service_relations.push rel
 			save
 		end
 
@@ -74,9 +78,9 @@ module TwistlockControl
 
 		def serialize
 			attrs = self.attributes
-			service_attrs = services.map {|s|s.attributes}
+			service_attrs = service_relations.map {|s|s.attributes}
 			links_attrs = links.map {|l|l.attributes}
-			attrs[:services] = service_attrs
+			attrs[:service_relations] = service_attrs
 			attrs[:links] = links_attrs
 			attrs
 		end

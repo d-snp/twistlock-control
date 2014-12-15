@@ -8,7 +8,7 @@ describe TwistlockControl::Provisioner do
         # make container instance
         prov = TwistlockControl::Provisioner.new(name: 'MyName', url: 'url')
         api = double(TwistlockControl::ProvisionerAPI)
-        prov.stub(:api).and_return(api)
+        expect(prov).to_receive(:api).and_return(api)
         expect(api).to receive(:add_service).with('MyContainer', 'someUrl').and_return(true)
         prov.provision(service)
     end
