@@ -13,6 +13,7 @@ require 'entities/container'
 require 'repository'
 require 'repositories/provisioner'
 require 'repositories/service'
+require 'repositories/service_instance'
 
 module TwistlockControl
 	class << self

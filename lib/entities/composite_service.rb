@@ -77,7 +77,7 @@ module TwistlockControl
 		end
 
 		def serialize
-			attrs = self.attributes
+			attrs = self.attributes.dup
 			service_attrs = service_relations.map {|s|s.attributes}
 			links_attrs = links.map {|l|l.attributes}
 			attrs[:service_relations] = service_attrs

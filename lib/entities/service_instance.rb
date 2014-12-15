@@ -1,6 +1,19 @@
 module TwistlockControl
 	class Configuration < Entity
 		attribute :service_id
+
+		def serialize
+			attributes.dup
+		end
+
+		def self.new(attrs)
+			if attrs["configurations"] || attrs[:configurations]
+				obj = CompositeConfiguration.allocate
+			else
+				obj = ContainerConfiguration.allocate
+			end
+			obj.send :initialize, attrs
+		end
 	end
 
 	class ContainerConfiguration < Configuration
@@ -17,6 +30,12 @@ module TwistlockControl
 
 	class CompositeConfiguration < Configuration
 		attribute :configurations, [Configuration]
+
+		def serialize
+			serialized = super
+			serialized[:configurations] = configurations.map(&:serialize)
+			serialized
+		end
 	end
 
 	# A service instance is an entity that represents an instance of a service
@@ -34,10 +53,22 @@ module TwistlockControl
 	# The configuration has a tree structure. For each composite service there will
 	# be a branch element, for every container a leaf. 
 	class ServiceInstance < Entity
-		attribute :id, String
+		attribute :id, String, default: :generate_id
 		attribute :name, String
 		attribute :service_id, String
 		attribute :configuration, Configuration
+
+		def generate_id
+			name
+		end
+
+		def self.find_by_id(id)
+			if attributes = ServiceInstanceRepository.find_by_id(id)
+				new(attributes)
+			else
+				nil
+			end
+		end
 
 		def self.create(name, service)
 			configuration = build_configuration(service)
@@ -61,7 +92,21 @@ module TwistlockControl
 		# provision containers from these configuration settings.
 
 		def service
-			Service.find(service_id)
+			Service.find_by_id(service_id)
+		end
+
+		def serialize
+			serialized = attributes.dup
+			serialized[:configuration] = configuration.serialize
+			serialized
+		end
+
+		def save
+			ServiceInstanceRepository.save(serialize)
+		end
+
+		def remove
+			ServiceInstanceRepository.remove(id)
 		end
 	end
 end
