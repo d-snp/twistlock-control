@@ -1,6 +1,21 @@
 module TwistlockControl
+	#
+	# Link cases:
+	#
+	#   1. Multi-consumer: a webservice might have 10 Ruby frontend apps, all connecting
+	#      to the same database. Simply increasing the amount of service instances with
+	#      the same links will solve this case. Question: do we want to specify this
+	#      possibility in each service link, or can we simply assume all services are
+	#      scalable in this way? Not all are, but maybe that's a service property, not
+	#      a relation property.
+	#   2. Multi-producer: A MongoDB cluster might have multiple master nodes. A Ruby
+	#      frontend app may want to connect to any of these. The problem is that it will
+	#      have to know before starting on which ports this potentially infinite number
+	#      of servers has, and somehow choose between them. A solution might be to couple
+	#      each Ruby app with a random master.
+	#
+	# I have the feeling this isn't something that should be stored in the relation either.
 	class ServiceRelation < Entity
-		attribute :name, String
 		attribute :service_id, String
 
 		def service
