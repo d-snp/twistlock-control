@@ -2,6 +2,8 @@ require 'net/http'
 require 'uri'
 
 module TwistlockControl
+	# The provisioner api provides a direct synchronous interface to a provisioner
+	# at the url it is initialized with.
 	class ProvisionerAPI
 		attr_reader :url
 

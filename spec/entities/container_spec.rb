@@ -12,10 +12,12 @@ module TwistlockControl
 			@container = Container.new(name: 'redis', url: dir)
 		end
 
-		it "should be able to get a description" do
-			container.get_description
-			expect(container.description).to be_a(ContainerDescription)
-			expect(container.description.name).to eq("redis")
+		describe "synchronizing the description" do
+			it "should be able to get a description" do
+				container.synchronize_description
+				expect(container.description).to be_a(ContainerDescription)
+				expect(container.description.name).to eq("redis")
+			end
 		end
 	end
 end

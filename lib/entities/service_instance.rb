@@ -58,6 +58,48 @@ module TwistlockControl
 		attribute :service_id, String
 		attribute :configuration, Configuration
 
+		# We want to tell all containers how they are linked to eachother.
+		# Composite services have the information about which links exist.
+		# How many instances there are of a container should be configured
+		# at runtime. Can we just do it by adding ContainerConfigurations
+		# to a CompositeConfiguration? That would mean the build_configuration
+		# method would have to only build composite configurations, leaving
+		# the filling in of container configurations to the interactive 
+		# resource allocation process. I.E. the user would create a composite
+		# configuration, then for each container needed of each composite
+		# service they would select on which machine(s) any containers will
+		# be ran. When a container configuration is created it can be 
+		# determined to which other container configuration it is linked.
+		# 
+		# So the next step is to change build_configuration to reflect that,
+		# then we add methods to CompositeConfiguration that allow to convenient
+		# addition of ContainerConfigurations. Including a way to enumerate
+		# which containers are needed.
+		#
+		# We also need to think about the linking, at the moment the provisioner
+		# can link a container to any ip address. When the containers are
+		# on separate machines, we can not usually link the containers directly
+		# on ip, a link would first have to be established. I envisioned this
+		# would ideally be through a simple TLS tunnel established by an ambassador
+		# container.
+		#
+		# If we would go for the ambassador approach the Twistlock system would
+		# have to be aware of this as it would have to provision ambassador nodes
+		# and use the ip addresses of the ambassador nodes to connect across machines.
+		#
+		# Alternatively, we could assume all machines in the cluster are in the
+		# same IP space and simply link them together. This would move the encryption
+		# and network management to a separate level and would ideally be a superior
+		# architecture, but in practice there is no simple way of achieving this
+		# in a way that is compatible with all container providers and all hosts.
+		# Since we want Twistlock to be an easy to deploy integrated solution,
+		# Twistlock would have to supply an automatic way of configuring such a
+		# datacenter without messing with existing architecture too much. A complex
+		# task that's not guaranteed to have a perfect solution.
+		#
+		# We could also for now simply assume a flat ip space, and work on the 
+		# ambassador system later.
+
 		def generate_id
 			name
 		end

@@ -4,9 +4,16 @@ require 'fileutils'
 require 'yaml'
 
 module TwistlockControl
+	class RelatedServiceDescription < Entity
+		attribute :port
+		attribute :description
+	end
+
 	class ContainerDescription < Entity
 		attribute :name, String
 		attribute :description, String
+		attribute :provided_services, Hash[String => RelatedServiceDescription]
+		attribute :consumed_services, Hash[String => RelatedServiceDescription]
 
 		def self.fetch(container)
 			nonce = SecureRandom.hex[0..7]
@@ -19,6 +26,15 @@ module TwistlockControl
 				new(YAML.load(result))
 			end
 		end
+
+		def serialize
+			provided_services = (provided_services || {}).inject({}) {|r,(k,v)| r[k] = v.attributes }
+			consumed_services = (consumed_services || {}).inject({}) {|r,(k,v)| r[k] = v.attributes }
+			attributes.dup.merge!(
+				:provided_services => provided_services,
+				:consumed_services => consumed_services
+			)
+		end
 	end
 	
 	# A container is a service that can be provisioned on a Twistlock provisioner node.
@@ -29,16 +45,35 @@ module TwistlockControl
 		attribute :name, String
 		attribute :description, ContainerDescription
 
+		# The network services provided by this service. Each service is
+		# identified with a name, for example: offers HTTP on port 80.
+		def provided_services
+			description.provided_services
+		end
+
+		# The service can depend on any other services. For example it might
+		# require a MySQL service to be linked in on port 3047.
+		def consumed_services
+			description.consumed_services
+		end
+
 		def generate_id
 			Digest::SHA256.hexdigest(url)
 		end
 
-		def get_description
+		def synchronize_description
 			@description = ContainerDescription.fetch(self)
+			save
+		end
+
+		def serialize
+			attrs = self.attributes.dup.merge!(
+				:description => description ? description.serialize : nil
+			)
 		end
 
 		def save
-			ServiceRepository.save(self.attributes)
+			ServiceRepository.save(serialize)
 		end
 
 		def remove
