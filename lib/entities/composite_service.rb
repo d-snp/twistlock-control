@@ -7,11 +7,20 @@ module TwistlockControl
 		end
 	end
 
+	# A service link can for example be, the 'MySQL' container exposes a 'mysql' port.
+	# The 'RubyForum' container consumes this service by listening on the 'mysql' port.
+	# The accompanying ServiceLink would be: 
+	# {
+	# 	provider_name: "MySQL",
+	# 	provider_port_name: "mysql",
+	# 	consumer_name: "RubyForum",
+	# 	consumer_port: "mysql" 
+    # }
 	class ServiceLink < Entity
 		attribute :provider_name, String
 		attribute :consumer_name, String
-		attribute :provider_service_name, String
-		attribute :consumer_service_name, String
+		attribute :provider_port_name, String
+		attribute :consumer_port_name, String
 	end
 
 	# A CompositeService is a service that consists of a number of services working together to
@@ -41,7 +50,6 @@ module TwistlockControl
 		#      have to know before starting on which ports this potentially infinite number
 		#      of servers has, and somehow choose between them. A solution might be to couple
 		#      each Ruby app with a random master.
-		#
 		attribute :service_relations, Hash[String => String]
 		attribute :links, [ServiceLink]
 
