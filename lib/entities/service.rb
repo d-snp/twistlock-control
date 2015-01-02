@@ -10,7 +10,20 @@ module TwistlockControl
 		attribute :consumed_services, Hash[String => Integer]
 
 		def self.find_by_id(id)
-			attrs = ServiceRepository.find_by_id(id)
+			deserialize ServiceRepository.find_by_id(id)
+		end
+
+		def self.find_with_ids(ids)
+			ServiceRepository.find_with_ids(ids).map{|a| deserialize a }
+		end
+
+		def self.all
+			ServiceRepository.all.map{ |a| deserialize a }
+		end
+
+		def self.deserialize(attrs)
+			return nil if attrs.nil?
+
 			case attrs['service_type']
 			when 'container'
 				Container.new(attrs)
