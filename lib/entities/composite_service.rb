@@ -53,6 +53,16 @@ module TwistlockControl
 		attribute :service_relations, Hash[String => String]
 		attribute :links, [ServiceLink]
 
+		# A provided service basically means this composite service exposes a port of one
+		# of its services. In the forum example, it could be the port 80 http service of
+		# the RubyForum container.
+		#
+		# {
+		# 	http: { RubyForum: 'http' }
+		# }
+		#
+		attribute :provided_services, Hash[String => String]
+
 		def services
 			Service.find_with_ids(service_relations.values)
 		end
@@ -78,10 +88,16 @@ module TwistlockControl
 			result
 		end
 
+		# Example: forum_service.expose('http', {'RubyForum': 'http'})
 		def expose(provided_service_name, service)
-			raise "Implement expose properly"
+			provided_services[provided_service_name] = service
+			save
 		end
 
+		# Links two services together.
+		# Example: forum_service.expose('Redis', 'redis', 'RubyForum', 'redis')
+		# This makes the redis port of the Redis service available on the redis port
+		# of the RubyForum container.
 		def link(provider, provider_service_name, consumer, consumer_service_name)
 			links.push ServiceLink.new(
 				provider_name: provider.name,
