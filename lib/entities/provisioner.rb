@@ -6,13 +6,11 @@ module TwistlockControl
 		attribute :name, String
 		attribute :url, String
 
-		def provision(container_instance)
-			# it must send the provision command,
-			# execute any links, mount any mounts
-			# and set any instance variables
-			# finally it should return the id of
-			# the provisioned container
-			raise "TODO implement provisioning"
+		# Provision takes a ContainerConfiguration and when
+		# it is done provisioning it will notify the ContainerConfiguration
+		# of the ip address and container id of the provisioned container.
+		def provision(container_configuration)
+				
 		end
 
 		def container_description(name)

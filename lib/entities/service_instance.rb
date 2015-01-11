@@ -1,5 +1,14 @@
 module TwistlockControl
-	class Configuration < Entity
+	class ContainerLink < Entity
+		attribute :local_port
+		attribute :remote_ip
+		attribute :remote_port
+		attribute :ambassador
+	end
+
+	# ProvisioningConfiguration holds service instance configuration that
+	# pertains to the provisioning of containers.
+	class ProvisioningConfiguration < Entity
 		attribute :service_id
 
 		def serialize
@@ -16,20 +25,28 @@ module TwistlockControl
 		end
 	end
 
-	class ContainerConfiguration < Configuration
+	# Maybe we want ContainerConfiguration to be an entity with its
+	# own repository, so we can simply refer to it by id.
+	# That will make getting events from the provisioner easier
+	class ContainerConfiguration < ProvisioningConfiguration
 		attribute :provisioner_id
 
 		# Runtime configurable settings
 		attribute :mount_points
 		attribute :environment_variables
+		attribute :links, Hash[String => ContainerLink]
 
 		# Attributes as dictated by provisioner
 		attribute :container_id
 		attribute :ip_address
+
+		def provision
+			Provisioner.find_by_id(provisioner_id).provision(self)
+		end
 	end
 
-	class CompositeConfiguration < Configuration
-		attribute :configurations, [Configuration]
+	class CompositeConfiguration < ProvisioningConfiguration
+		attribute :configurations, [ProvisioningConfiguration]
 
 		def serialize
 			serialized = super
@@ -56,7 +73,7 @@ module TwistlockControl
 		attribute :id, String, default: :generate_id
 		attribute :name, String
 		attribute :service_id, String
-		attribute :configuration, Configuration
+		attribute :configuration, ProvisioningConfiguration
 
 		# We want to tell all containers how they are linked to eachother.
 		# Composite services have the information about which links exist.
@@ -162,10 +179,6 @@ module TwistlockControl
 			end
 			c
 		end
-
-		# TODO test if building configurations like this works, whether it's sane, whether
-		# we can use this to configure for provisioning, and find out and implement how to
-		# provision containers from these configuration settings.
 
 		def service
 			Service.find_by_id(service_id)

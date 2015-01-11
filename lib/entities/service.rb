@@ -1,6 +1,10 @@
 module TwistlockControl
 	# A Service class describes a provisionable network service.
 	class Service < Entity
+		def create_instance(name)
+			ServiceInstance.create(name, self)
+		end
+
 		def self.find_by_id(id)
 			deserialize ServiceRepository.find_by_id(id)
 		end
