@@ -69,7 +69,9 @@ module TwistlockControl
 	#
 	# The configuration has a tree structure. For each composite service there will
 	# be a branch element, for every container a leaf. 
-	class ServiceInstance < Entity
+	class ServiceInstance < PersistedEntity
+		repository ServiceInstanceRepository
+
 		attribute :id, String, default: :generate_id
 		attribute :name, String
 		attribute :service_id, String
@@ -155,14 +157,6 @@ module TwistlockControl
 			name
 		end
 
-		def self.find_by_id(id)
-			if attributes = ServiceInstanceRepository.find_by_id(id)
-				new(attributes)
-			else
-				nil
-			end
-		end
-
 		def self.create(name, service)
 			configuration = build_configuration(service)
 			instance = new(service_id: service.id, name: name, configuration: configuration)
@@ -188,14 +182,6 @@ module TwistlockControl
 			serialized = attributes.dup
 			serialized[:configuration] = configuration.serialize
 			serialized
-		end
-
-		def save
-			ServiceInstanceRepository.save(serialize)
-		end
-
-		def remove
-			ServiceInstanceRepository.remove(id)
 		end
 	end
 end

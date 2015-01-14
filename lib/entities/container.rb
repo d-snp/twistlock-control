@@ -72,27 +72,7 @@ module TwistlockControl
 			)
 		end
 
-		def save
-			ServiceRepository.save(serialize)
-		end
-
-		def remove
-			ServiceRepository.remove(id)
-		end
-
-		def self.find_by_id(id)
-			if attributes = ServiceRepository.find_by_id(id)
-				new(attributes)
-			else
-				nil
-			end
-		end
-
-		def self.find_with_ids(ids)
-			ServiceRepository.find_with_ids(ids).map {|a| new(a) }
-		end
-
-		def self.all()
+		def self.all
 			ServiceRepository.containers.map {|a| new(a) }
 		end
 	end

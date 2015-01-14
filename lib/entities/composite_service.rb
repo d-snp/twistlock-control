@@ -107,20 +107,11 @@ module TwistlockControl
 			save
 		end
 
-		def save
-			ServiceRepository.save(serialize)
-		end
-
 		def serialize
 			attrs = self.attributes.dup
 			links_attrs = links.map {|l|l.attributes}
 			attrs[:links] = links_attrs
 			attrs
 		end
-
-		def remove
-			ServiceRepository.remove(id)
-		end
 	end
-
 end
