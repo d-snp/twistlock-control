@@ -12,7 +12,7 @@ describe TwistlockControl::ServiceInstance do
 
 	# The user creates a service instance to prepare for provisioning
 	# a service
-	describe "Creating a service instance" do
+	describe 'Creating a service instance' do
 		def verify_service_instance(service, instance)
 			expect(instance.configuration).to be_a(TwistlockControl::CompositeConfiguration)
 			expect(instance.configuration.service_id).to eq(service.id)
@@ -22,14 +22,14 @@ describe TwistlockControl::ServiceInstance do
 			true
 		end
 
-		it "should create a service instance that has container descriptions
-		    for each container of the service template" do
+		it 'should create a service instance that has container descriptions
+		    for each container of the service template' do
 			service = make_service
 			instance = service.create_instance('my-instance')
 			expect(verify_service_instance(service, instance)).to be(true)
 		end
 
-		it "should be possible to retrieve a service instance from persistent storage" do
+		it 'should be possible to retrieve a service instance from persistent storage' do
 			service = make_service
 			instance = service.create_instance('my-instance')
 			instance.save
@@ -48,22 +48,22 @@ describe TwistlockControl::ServiceInstance do
 	# a container comes online the system will look through its desire links
 	# and establish them if possible.
 
-	describe "Setting an instance up for provisioning" do
-		pending "ContainerConfiguration should have its own repository"
+	describe 'Setting an instance up for provisioning' do
+		pending 'ContainerConfiguration should have its own repository'
 	end
 
-	describe "#serialize" do
+	describe '#serialize' do
 		def make_serialized
 			service = make_service
 			instance = service.create_instance('my-instance')
 			serialized = instance.serialize
 		end
 
-		it "should return a hash of attributes" do
+		it 'should return a hash of attributes' do
 			expect(make_serialized).to respond_to(:to_hash)
 		end
 
-		it "should be possible to initialize from serialized" do
+		it 'should be possible to initialize from serialized' do
 			serialized = make_serialized
 			instance = TwistlockControl::ServiceInstance.new(serialized)
 			expect(instance.configuration).to_not be(nil)

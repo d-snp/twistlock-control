@@ -4,7 +4,7 @@ module TwistlockControl
 	describe ProvisionerAPI do
 		attr_reader :api
 		before :all do
-			@api = ProvisionerAPI.new("http://localhost:3000")
+			@api = ProvisionerAPI.new('http://localhost:3000')
 		end
 		describe '#container_description' do
 			before :all do
@@ -13,9 +13,9 @@ module TwistlockControl
 					description: 'a description'
 				}.to_json)
 			end
-			it "should connect to the given address request the container description" do
-				result = api.container_description("redis")
-				expect(result['name']).to eq("redis")
+			it 'should connect to the given address request the container description' do
+				result = api.container_description('redis')
+				expect(result['name']).to eq('redis')
 			end
 		end
 

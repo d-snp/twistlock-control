@@ -10,8 +10,7 @@
 #  * zeus: 'zeus rspec' (requires the server to be started separetly)
 #  * 'just' rspec: 'rspec'
 guard :rspec, cmd: 'bundle exec rspec -c' do
-  watch(%r{^spec/.+_spec\.rb$}) { 'spec' }
-  watch(%r{^lib/.+\.rb$}) { 'spec' }
-  watch('spec/spec_helper.rb') { 'spec' }
+	watch(%r{^spec/.+_spec\.rb$}) { 'spec' }
+	watch(%r{^lib/.+\.rb$}) { 'spec' }
+	watch('spec/spec_helper.rb') { 'spec' }
 end
-
