@@ -1,4 +1,6 @@
 Style/Tab:
     Enabled: false
 Style/IndentationWidth:
-    Enabled: false
+    Width: 1
+Style/LineLength:
+    Max: 120
