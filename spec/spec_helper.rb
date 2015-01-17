@@ -1,3 +1,6 @@
+require 'simplecov'
+SimpleCov.start
+
 require 'twistlock_control'
 require 'webmock/rspec'
 
