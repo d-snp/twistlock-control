@@ -11,6 +11,12 @@ module TwistlockControl
 			@url = url
 		end
 
+		def provision_container(container_configuration)
+			container = container_configuration.container
+			add_container(container.name, container.url)
+			JSON.parse post('containers', name: container.name)
+		end
+
 		def container_description(name)
 			JSON.parse get("templates/#{name}")
 		end

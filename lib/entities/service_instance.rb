@@ -1,60 +1,4 @@
 module TwistlockControl
-	class ContainerLink < Entity
-		attribute :local_port
-		attribute :remote_ip
-		attribute :remote_port
-		attribute :ambassador
-	end
-
-	# ProvisioningConfiguration holds service instance configuration that
-	# pertains to the provisioning of containers.
-	class ProvisioningConfiguration < Entity
-		attribute :service_id
-
-		def serialize
-			attributes.dup
-		end
-
-		def self.new(attrs)
-			if attrs["configurations"] || attrs[:configurations]
-				obj = CompositeConfiguration.allocate
-			else
-				obj = ContainerConfiguration.allocate
-			end
-			obj.send :initialize, attrs
-		end
-	end
-
-	# Maybe we want ContainerConfiguration to be an entity with its
-	# own repository, so we can simply refer to it by id.
-	# That will make getting events from the provisioner easier
-	class ContainerConfiguration < ProvisioningConfiguration
-		attribute :provisioner_id
-
-		# Runtime configurable settings
-		attribute :mount_points
-		attribute :environment_variables
-		attribute :links, Hash[String => ContainerLink]
-
-		# Attributes as dictated by provisioner
-		attribute :container_id
-		attribute :ip_address
-
-		def provision
-			Provisioner.find_by_id(provisioner_id).provision(self)
-		end
-	end
-
-	class CompositeConfiguration < ProvisioningConfiguration
-		attribute :configurations, [ProvisioningConfiguration]
-
-		def serialize
-			serialized = super
-			serialized[:configurations] = configurations.map(&:serialize)
-			serialized
-		end
-	end
-
 	# A service instance is an entity that represents an instance of a service
 	# that can be started and stopped. For example, an operator might define a Forum
 	# service and then spawn a Forum service instance for each of his customers.
@@ -160,6 +104,8 @@ module TwistlockControl
 		def self.create(name, service)
 			configuration = build_configuration(service)
 			instance = new(service_id: service.id, name: name, configuration: configuration)
+			instance.save
+			instance
 		end
 
 		def self.build_configuration(service)
@@ -172,6 +118,10 @@ module TwistlockControl
 				raise "Unknown service type: #{service.service_type}"
 			end
 			c
+		end
+
+		def container_configurations
+			configuration.container_configurations
 		end
 
 		def service

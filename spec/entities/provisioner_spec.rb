@@ -2,15 +2,22 @@ require 'spec_helper'
 
 describe TwistlockControl::Provisioner do
     it "can provision a container instance" do
-        pending "implement provisioning properly"
+        prov = TwistlockControl::Provisioner.new(name: 'MyName', url: 'url')
+
         container = TwistlockControl::Container.new(name: 'MyContainer', url: 'someUrl')
         container.save
-        # make container instance
-        prov = TwistlockControl::Provisioner.new(name: 'MyName', url: 'url')
+
+        service_instance = TwistlockControl::ServiceInstance.create('myServiceInstance', container)
+
+        configuration = service_instance.container_configurations.first
+        configuration.provisioner = prov
+
         api = double(TwistlockControl::ProvisionerAPI)
-        expect(prov).to_receive(:api).and_return(api)
-        expect(api).to receive(:add_service).with('MyContainer', 'someUrl').and_return(true)
-        prov.provision(service)
+        expect(prov).to receive(:api).and_return(api)
+        expect(api).to receive(:provision_container).with(configuration).and_return(container_id: 'abcd', ip_address: '127.0.0.1')
+        
+        instance = configuration.provision()
+        service_instance.save
     end
 
     it "can be initialized from its attributes" do

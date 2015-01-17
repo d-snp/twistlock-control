@@ -3,6 +3,7 @@ require 'digest'
 module TwistlockControl
 	class Provisioner < PersistedEntity
 		repository ProvisionerRepository
+		
 		attribute :id, String, :default => :generate_id
 		attribute :name, String
 		attribute :url, String
@@ -11,7 +12,9 @@ module TwistlockControl
 		# it is done provisioning it will notify the ContainerConfiguration
 		# of the ip address and container id of the provisioned container.
 		def provision(container_configuration)
-				
+			instance = ContainerInstance.new(api.provision_container(container_configuration))
+			instance.save
+			instance
 		end
 
 		def container_description(name)

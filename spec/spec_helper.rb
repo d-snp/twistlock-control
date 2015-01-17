@@ -10,12 +10,14 @@ RSpec.configure do |config|
 		TwistlockControl::ProvisionerRepository.create_table
 		TwistlockControl::ServiceRepository.create_table
 		TwistlockControl::ServiceInstanceRepository.create_table
+		TwistlockControl::ContainerInstanceRepository.create_table
 	}
 	config.before(:each) {
 		TwistlockControl.with_connection do |conn|
 			TwistlockControl.database.table('provisioners').delete.run(conn)
 			TwistlockControl.database.table('services').delete.run(conn)
 			TwistlockControl.database.table('service_instances').delete.run(conn)
+			TwistlockControl.database.table('container_instances').delete.run(conn)
 		end
 	}
 	config.after(:all) {
