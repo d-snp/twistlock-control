@@ -32,14 +32,6 @@ module TwistlockControl
 			repository.all.map{ |a| deserialize a }
 		end
 
-		def self.repository(repository=nil)
-			if repository
-				@repository = repository
-			else
-				@repository || superclass.repository
-			end
-		end
-
 		def save
 			repository.save(serialize)
 		end
@@ -50,6 +42,19 @@ module TwistlockControl
 
 		def repository
 			self.class.repository
+		end
+
+		def self.inherited(subclass)
+			subclass.class_exec do
+				def self.repository(repository=nil)
+					if repository
+						@repository = repository
+					else
+						@repository || (superclass.respond_to?(:repository) ? superclass.repository : (raise "#{name} has not defined a repository.") )
+					end
+				end
+			end
+			super(subclass)
 		end
 	end
 end
