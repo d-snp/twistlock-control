@@ -14,3 +14,8 @@ guard :rspec, cmd: 'bundle exec rspec -c' do
 	watch(/^lib\/.+\.rb$/) { 'spec' }
 	watch('spec/spec_helper.rb') { 'spec' }
 end
+
+guard :rubocop do
+	watch(/.+\.rb$/)
+	watch(/(?:.+\/)?\.rubocop\.yml$/) { |m| File.dirname(m[0]) }
+end
