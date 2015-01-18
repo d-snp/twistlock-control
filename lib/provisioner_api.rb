@@ -26,6 +26,7 @@ module TwistlockControl
 		end
 
 		private
+
 		def uri(path)
 			URI(url + '/' + path)
 		end

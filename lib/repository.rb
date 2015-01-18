@@ -1,7 +1,12 @@
 module TwistlockControl
+	# A Repository is an interface to a persistant storage
+	# The current implementation is very specific to rethinkdb,
+	# if we would extend to support other storage we would move
+	# this code into a class called "RethinkDBRepository" that
+	# extends from this class.
 	class Repository
 		def self.table_name
-			raise "#{self.class.name} should override table_name but does not"
+			fail "#{self.class.name} should override table_name but does not"
 		end
 
 		def self.table
@@ -22,7 +27,7 @@ module TwistlockControl
 
 		def self.find_by_attributes(attrs)
 			with_connection do |conn|
-				table.filter(attrs).limit(1).run(conn).first	
+				table.filter(attrs).limit(1).run(conn).first
 			end
 		end
 
@@ -55,6 +60,7 @@ module TwistlockControl
 				TwistlockControl.database.table_create(table_name).run(conn)
 			end
 		rescue RethinkDB::RqlRuntimeError
+			nil
 		end
 	end
 end

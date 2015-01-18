@@ -12,7 +12,7 @@ module TwistlockControl
 	# their runtime configuration.
 	#
 	# The configuration has a tree structure. For each composite service there will
-	# be a branch element, for every container a leaf. 
+	# be a branch element, for every container a leaf.
 	class ServiceInstance < PersistedEntity
 		repository ServiceInstanceRepository
 
@@ -27,13 +27,13 @@ module TwistlockControl
 		# at runtime. Can we just do it by adding ContainerConfigurations
 		# to a CompositeConfiguration? That would mean the build_configuration
 		# method would have to only build composite configurations, leaving
-		# the filling in of container configurations to the interactive 
+		# the filling in of container configurations to the interactive
 		# resource allocation process. I.E. the user would create a composite
 		# configuration, then for each container needed of each composite
 		# service they would select on which machine(s) any containers will
-		# be ran. When a container configuration is created it can be 
+		# be ran. When a container configuration is created it can be
 		# determined to which other container configuration it is linked.
-		# 
+		#
 		# So the next step is to change build_configuration to reflect that,
 		# then we add methods to CompositeConfiguration that allow to convenient
 		# addition of ContainerConfigurations. Including a way to enumerate
@@ -60,7 +60,7 @@ module TwistlockControl
 		# datacenter without messing with existing architecture too much. A complex
 		# task that's not guaranteed to have a perfect solution.
 		#
-		# We could also for now simply assume a flat ip space, and work on the 
+		# We could also for now simply assume a flat ip space, and work on the
 		# ambassador system later. A downside of that is that we might miss some
 		# architectural decision would enable the ambassador system to be more neatly
 		# integrated. So let's thing about the ambassador approach first.
@@ -86,7 +86,7 @@ module TwistlockControl
 		#    - make sure all hosts have container descriptions/images
 		#    - determine all cross-machine links
 		#    - inform ambassadors of links
-		# 
+		#
 		# Then the provisioning process itself:
 		#    - start each container on its host
 		#    - fill in ip-addresses of container instances
@@ -110,14 +110,15 @@ module TwistlockControl
 
 		def self.build_configuration(service)
 			case service.service_type
-			when :container
-				c = ContainerConfiguration.new(service_id: service.id)
+			when :container then ContainerConfiguration.new(service_id: service.id)
 			when :composite
-				c = CompositeConfiguration.new(service_id: service.id, configurations: service.services.map{|s| build_configuration(s)})
+				CompositeConfiguration.new(
+					service_id: service.id,
+					configurations: service.services.map { |s| build_configuration(s) }
+				)
 			else
-				raise "Unknown service type: #{service.service_type}"
+				fail "Unknown service type: #{service.service_type}"
 			end
-			c
 		end
 
 		def container_configurations

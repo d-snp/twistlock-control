@@ -1,21 +1,13 @@
 module TwistlockControl
-	class ServiceRelation < Entity
-		attribute :service_id, String
-
-		def service
-			Service.find_by_id(service_id)
-		end
-	end
-
 	# A service link can for example be, the 'MySQL' container exposes a 'mysql' port.
 	# The 'RubyForum' container consumes this service by listening on the 'mysql' port.
-	# The accompanying ServiceLink would be: 
+	# The accompanying ServiceLink would be:
 	# {
-	# 	provider_name: "MySQL",
-	# 	provider_port_name: "mysql",
-	# 	consumer_name: "RubyForum",
-	# 	consumer_port: "mysql" 
-    # }
+	# provider_name: "MySQL",
+	# provider_port_name: "mysql",
+	# consumer_name: "RubyForum",
+	# consumer_port: "mysql"
+	# }
 	class ServiceLink < Entity
 		attribute :provider_name, String
 		attribute :consumer_name, String
@@ -33,8 +25,8 @@ module TwistlockControl
 	# Relations between services are described by the links attribute. A link is characterized by
 	# a producer and a consumer, the consumer will connect to the producers provided service.
 	class CompositeService < Service
-		attribute :service_type, Symbol, :default => :composite
-		attribute :id, String, :default => :generate_id
+		attribute :service_type, Symbol, default: :composite
+		attribute :id, String, default: :generate_id
 		attribute :name, String
 
 		# Link cases:
@@ -68,10 +60,10 @@ module TwistlockControl
 		end
 
 		def generate_id
-			name.downcase.gsub(' ','-')
+			name.downcase.gsub(' ', '-')
 		end
 
-		def add_service(service, name=nil)
+		def add_service(service, name = nil)
 			service_relations[name || service.name] = service.id
 			save
 		end
@@ -79,8 +71,8 @@ module TwistlockControl
 		def containers
 			result = []
 			services = self.services.map(&:service)
-			composites = services.select{|s| s.service_type == :composite}
-			containers = services.select{|s| s.service_type == :container}
+			composites = services.select { |s| s.service_type == :composite }
+			containers = services.select { |s| s.service_type == :container }
 			result += containers
 			composites.each do |c|
 				result += c.containers
@@ -108,10 +100,7 @@ module TwistlockControl
 		end
 
 		def serialize
-			attrs = self.attributes.dup
-			links_attrs = links.map {|l|l.attributes}
-			attrs[:links] = links_attrs
-			attrs
+			super.merge! links: links.map(&:attributes)
 		end
 	end
 end

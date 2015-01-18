@@ -1,10 +1,11 @@
 require 'digest'
 
 module TwistlockControl
+	# A provisioner is a machine capable of provisioning containers
 	class Provisioner < PersistedEntity
 		repository ProvisionerRepository
-		
-		attribute :id, String, :default => :generate_id
+
+		attribute :id, String, default: :generate_id
 		attribute :name, String
 		attribute :url, String
 
@@ -26,6 +27,7 @@ module TwistlockControl
 		end
 
 		private
+
 		def api
 			@api ||= ProvisionerAPI.new(url)
 		end

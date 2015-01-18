@@ -1,11 +1,12 @@
 require 'virtus'
 
 module TwistlockControl
+	# An entity is basically a struct with typed fields.
 	class Entity
 		include Virtus.model
 
 		def ==(other)
-			return false if !other.respond_to? :attributes
+			return false unless other.respond_to? :attributes
 			attributes == other.attributes
 		end
 
@@ -14,6 +15,8 @@ module TwistlockControl
 		end
 	end
 
+	# A persisted entity is an entity that has its own persistant
+	# storage repository.
 	class PersistedEntity < Entity
 		def self.find_by_id(id)
 			deserialize repository.find_by_id(id)
@@ -25,11 +28,11 @@ module TwistlockControl
 		end
 
 		def self.find_with_ids(ids)
-			repository.find_with_ids(ids).map{|a| deserialize a }
+			repository.find_with_ids(ids).map { |a| deserialize a }
 		end
 
 		def self.all
-			repository.all.map{ |a| deserialize a }
+			repository.all.map { |a| deserialize a }
 		end
 
 		def save
@@ -46,12 +49,12 @@ module TwistlockControl
 
 		def self.inherited(subclass)
 			subclass.class_exec do
-				def self.repository(repository=nil)
-					if repository
-						@repository = repository
-					else
-						@repository || (superclass.respond_to?(:repository) ? superclass.repository : (raise "#{name} has not defined a repository.") )
-					end
+				def self.repository(repository = nil)
+					return @repository = repository if repository
+					return @repository if @repository
+					return superclass.repository if superclass.respond_to?(:repository)
+
+					fail "#{name} has not defined a repository."
 				end
 			end
 			super(subclass)

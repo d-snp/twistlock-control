@@ -5,7 +5,7 @@ module TwistlockControl
 		attribute :service_id
 
 		def self.new(attrs)
-			if attrs["configurations"] || attrs[:configurations]
+			if attrs['configurations'] || attrs[:configurations]
 				obj = CompositeConfiguration.allocate
 			else
 				obj = ContainerConfiguration.allocate
@@ -50,6 +50,7 @@ module TwistlockControl
 		end
 	end
 
+	# Configuration for a composite service
 	class CompositeConfiguration < ProvisioningConfiguration
 		attribute :configurations, [ProvisioningConfiguration]
 

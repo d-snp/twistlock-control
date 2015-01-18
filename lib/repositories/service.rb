@@ -1,4 +1,5 @@
 module TwistlockControl
+	# A repository for services like containers and composite services.
 	class ServiceRepository < Repository
 		def self.table_name
 			'services'

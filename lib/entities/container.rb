@@ -4,11 +4,15 @@ require 'fileutils'
 require 'yaml'
 
 module TwistlockControl
+	# A RelatedServiceDescription is used to describe a provided
+	# or consumed service.
 	class RelatedServiceDescription < Entity
 		attribute :port
 		attribute :description
 	end
 
+	# A ContainerDescription represents the container description
+	# file that's used to describe properties of containers.
 	class ContainerDescription < Entity
 		attribute :name, String
 		attribute :description, String
@@ -28,19 +32,19 @@ module TwistlockControl
 		end
 
 		def serialize
-			provided_services = (provided_services || {}).inject({}) {|r,(k,v)| r[k] = v.attributes }
-			consumed_services = (consumed_services || {}).inject({}) {|r,(k,v)| r[k] = v.attributes }
+			provided_services = (provided_services || {}).inject({}) { |r, (k, v)| r[k] = v.attributes }
+			consumed_services = (consumed_services || {}).inject({}) { |r, (k, v)| r[k] = v.attributes }
 			attributes.dup.merge!(
-				:provided_services => provided_services,
-				:consumed_services => consumed_services
+				provided_services: provided_services,
+				consumed_services: consumed_services
 			)
 		end
 	end
-	
+
 	# A container is a service that can be provisioned on a Twistlock provisioner node.
 	class Container < Service
-		attribute :service_type, Symbol, :default => :container
-		attribute :id, String, :default => :generate_id
+		attribute :service_type, Symbol, default: :container
+		attribute :id, String, default: :generate_id
 		attribute :url, String
 		attribute :name, String
 		attribute :description, ContainerDescription
@@ -67,13 +71,13 @@ module TwistlockControl
 		end
 
 		def serialize
-			attrs = self.attributes.dup.merge!(
-				:description => description ? description.serialize : nil
+			super.merge!(
+				description: description ? description.serialize : nil
 			)
 		end
 
 		def self.all
-			ServiceRepository.containers.map {|a| new(a) }
+			ServiceRepository.containers.map { |a| new(a) }
 		end
 	end
 end

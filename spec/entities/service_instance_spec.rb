@@ -16,10 +16,14 @@ describe TwistlockControl::ServiceInstance do
 		def verify_service_instance(service, instance)
 			expect(instance.configuration).to be_a(TwistlockControl::CompositeConfiguration)
 			expect(instance.configuration.service_id).to eq(service.id)
-			expect(instance.configuration.configurations.length).to eq(1)
-			expect(instance.configuration.configurations[0]).to be_a(TwistlockControl::ContainerConfiguration)
-			expect(instance.configuration.configurations[0].service_id).to eq(@container.id)
+			verify_configurations(instance.configuration.configurations)
 			true
+		end
+
+		def verify_configurations(configurations)
+			expect(configurations.length).to eq(1)
+			expect(configurations[0]).to be_a(TwistlockControl::ContainerConfiguration)
+			expect(configurations[0].service_id).to eq(@container.id)
 		end
 
 		it 'should create a service instance that has container descriptions
@@ -56,7 +60,7 @@ describe TwistlockControl::ServiceInstance do
 		def make_serialized
 			service = make_service
 			instance = service.create_instance('my-instance')
-			serialized = instance.serialize
+			instance.serialize
 		end
 
 		it 'should return a hash of attributes' do
