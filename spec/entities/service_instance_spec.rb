@@ -53,7 +53,9 @@ describe TwistlockControl::ServiceInstance do
 	# and establish them if possible.
 
 	describe 'Setting an instance up for provisioning' do
-		pending 'ContainerConfiguration should have its own repository'
+		describe 'we should be able to provision a service instance' do
+			pending 'how do we want to test this?'
+		end
 	end
 
 	describe '#serialize' do
