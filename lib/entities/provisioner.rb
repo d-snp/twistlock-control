@@ -26,8 +26,6 @@ module TwistlockControl
 			Digest::SHA256.hexdigest(url)
 		end
 
-		private
-
 		def api
 			@api ||= ProvisionerAPI.new(url)
 		end

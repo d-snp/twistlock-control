@@ -22,9 +22,12 @@ When(/^(?:a|the) user configures the service instance$/) do
 end
 
 When(/^(?:a|the) user gives the provision command$/) do
+	api_double = double
+	expect(api_double).to receive(:provision_container).and_return({})
+	expect(@provisioner).to receive(:api).and_return(api_double)
 	@service_instance.provision
 end
 
-Then(/^(?:a|the) provisioner should be sent a provisioning command$/) do
-	pending # express the regexp above with the code you wish you had
+Then(/^a container instance should be provisioned$/) do
+  expect(ContainerInstance.all.length).to equal(1)
 end

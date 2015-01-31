@@ -1,5 +1,8 @@
 source 'https://rubygems.org'
 
+gem 'rspec'
+gem 'rspec-mocks'
+gem 'webmock'
 gem 'guard'
 gem 'guard-rspec'
 gem 'cucumber', require: false, group: :development

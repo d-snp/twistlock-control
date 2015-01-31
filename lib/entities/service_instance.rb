@@ -121,6 +121,10 @@ module TwistlockControl
 			end
 		end
 
+		def provision
+			container_configurations.map(&:provision)
+		end
+
 		def container_configurations
 			configuration.container_configurations
 		end

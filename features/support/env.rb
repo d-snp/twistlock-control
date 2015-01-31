@@ -1,5 +1,7 @@
 require 'twistlock_control'
 
+require 'cucumber/rspec/doubles'
+
 include TwistlockControl
 
 Before do

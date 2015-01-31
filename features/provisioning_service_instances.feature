@@ -11,4 +11,4 @@ Feature: Provisioning service instances
 		Then the user should be presented with a configurable representation of the service
 		When the user configures the service instance
 		And the user gives the provision command
-		Then the provisioner should be sent a provisioning command
+		Then a container instance should be provisioned
