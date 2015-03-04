@@ -8,20 +8,17 @@ TwistlockControl.configure do |c|
 	c.database_name = 'test'
 end
 
+def repositories
+	%w(provisioners services service_instances container_instances)
+		.map { |n| TwistlockControl::RethinkDBRepository[n] }
+end
+
 RSpec.configure do |config|
 	config.before(:all) do
-		TwistlockControl::ProvisionerRepository.create_table
-		TwistlockControl::ServiceRepository.create_table
-		TwistlockControl::ServiceInstanceRepository.create_table
-		TwistlockControl::ContainerInstanceRepository.create_table
+		repositories.each(&:create_table)
 	end
 	config.before(:each) do
-		TwistlockControl.with_connection do |conn|
-			TwistlockControl.database.table('provisioners').delete.run(conn)
-			TwistlockControl.database.table('services').delete.run(conn)
-			TwistlockControl.database.table('service_instances').delete.run(conn)
-			TwistlockControl.database.table('container_instances').delete.run(conn)
-		end
+		repositories.each(&:delete_all)
 	end
 	config.after(:all) {}
 	config.after(:each) {}

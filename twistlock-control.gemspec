@@ -8,8 +8,8 @@ Gem::Specification.new do |spec|
 	spec.version       = TwistlockControl::VERSION
 	spec.authors       = ['Tinco Andringa']
 	spec.email         = ['mail@tinco.nl']
-	spec.description   = '{TODO: Write a gem description'
-	spec.summary       = 'TODO: Write a gem summary'
+	spec.description   = 'Library for controlling Twistlock Provisioners'
+	spec.summary       = 'Library for controlling Twistlock Provisioners'
 	spec.homepage      = ''
 	spec.license       = 'MIT'
 

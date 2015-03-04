@@ -3,7 +3,7 @@ require 'digest'
 module TwistlockControl
 	# A provisioner is a machine capable of provisioning containers
 	class Provisioner < PersistedEntity
-		repository ProvisionerRepository
+		repository RethinkDBRepository['provisioners']
 
 		attribute :id, String, default: :generate_id
 		attribute :name, String

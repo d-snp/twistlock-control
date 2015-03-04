@@ -29,5 +29,5 @@ When(/^(?:a|the) user gives the provision command$/) do
 end
 
 Then(/^a container instance should be provisioned$/) do
-  expect(ContainerInstance.all.length).to equal(1)
+	expect(ContainerInstance.all.length).to equal(1)
 end

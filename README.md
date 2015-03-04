@@ -18,21 +18,25 @@ Or install it yourself as:
 
 ## Usage
 
-Usual case is that the user creates a service. Then the user adds a container to that service. When the user adds a container
-the system will want to fetch the description of that container so it can present the user with the options available to that
-container. The system does the fetching by having a primary provisioner configured. This is the only reason to have a primary
-provisioner. What we could alternatively do is just git clone the repo and read it ourselves. The advantage is that we don’t
-have to configure a local provisioner, the disadvantage is that this API will have to be capable of any technologies the
-provisioner is capable of for acquiring container descriptions.
+The TwistlockControl system has a user interface called Rotterdam. Rotterdam executes
+the logic functions in here to manipulate the Twistlock provisioners. 
 
-We could do:
+Actions that Rotterdam needs that this library implements:
 
-    mkdir /tmp/redis-container-6d25361d
-    cd /tmp/redis-container-6d25361d
-    git clone -n --depth=1 git@github.com:d-snp/redis-container.git
-    git checkout HEAD twistlock.yml
-    cat twistlock.yml && rm -rf /tmp/redis-container-6d25361d
+  * Defining services
+  * Importing container descriptions
+  * Creating service instances
+  * Configuring service instances
+  * Adding provisioners
+  * Provisioning service instances on provisioners
 
+To aid these actions, Rotterdam needs to subscribe to the following resources:
+
+  * Defined services
+  * Imported container descriptions
+  * Service instances
+  * Provisioners
+  * Container instances
 
 ## Contributing
 

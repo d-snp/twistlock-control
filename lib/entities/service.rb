@@ -1,7 +1,7 @@
 module TwistlockControl
 	# A Service class describes a provisionable network service.
 	class Service < PersistedEntity
-		repository ServiceRepository
+		repository RethinkDBRepository['services']
 
 		def create_instance(name)
 			ServiceInstance.create(name, self)

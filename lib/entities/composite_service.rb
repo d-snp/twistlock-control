@@ -59,10 +59,6 @@ module TwistlockControl
 			Service.find_with_ids(service_relations.values)
 		end
 
-		def generate_id
-			name.downcase.gsub(' ', '-')
-		end
-
 		def add_service(service, name = nil)
 			service_relations[name || service.name] = service.id
 			save
@@ -101,6 +97,12 @@ module TwistlockControl
 
 		def serialize
 			super.merge! links: links.map(&:attributes)
+		end
+
+		private
+
+		def generate_id
+			name.downcase.gsub(' ', '-')
 		end
 	end
 end

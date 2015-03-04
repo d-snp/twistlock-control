@@ -2,7 +2,7 @@ module TwistlockControl
 	# A container instance represents a container currently
 	# running on a provisioner.
 	class ContainerInstance < PersistedEntity
-		repository ContainerInstanceRepository
+		repository RethinkDBRepository['container_instances']
 
 		attribute :id, String, default: :generate_id
 

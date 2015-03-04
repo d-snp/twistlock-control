@@ -14,7 +14,7 @@ module TwistlockControl
 	# The configuration has a tree structure. For each composite service there will
 	# be a branch element, for every container a leaf.
 	class ServiceInstance < PersistedEntity
-		repository ServiceInstanceRepository
+		repository RethinkDBRepository['service_instances']
 
 		attribute :id, String, default: :generate_id
 		attribute :name, String
