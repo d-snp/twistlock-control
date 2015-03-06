@@ -19,18 +19,6 @@ module TwistlockControl
 		attribute :provided_services, Hash[String => RelatedServiceDescription]
 		attribute :consumed_services, Hash[String => RelatedServiceDescription]
 
-		def self.fetch(container)
-			nonce = SecureRandom.hex[0..7]
-			dirname = "/tmp/#{container.name}-#{nonce}"
-			FileUtils.mkdir_p dirname
-			Dir.chdir(dirname) do
-				`git clone -n --depth=1 #{container.url} .`
-				`git checkout HEAD twistlock.yml`
-				result = `cat twistlock.yml && rm -rf #{dirname}`
-				new(YAML.load(result))
-			end
-		end
-
 		def serialize
 			provided_services = (provided_services || {}).inject({}) { |r, (k, v)| r[k] = v.attributes }
 			consumed_services = (consumed_services || {}).inject({}) { |r, (k, v)| r[k] = v.attributes }
@@ -63,11 +51,6 @@ module TwistlockControl
 
 		def generate_id
 			Digest::SHA256.hexdigest(url)
-		end
-
-		def synchronize_description
-			@description = ContainerDescription.fetch(self)
-			save
 		end
 
 		def serialize
