@@ -36,7 +36,14 @@ describe CompositeService do
 		app.save
 		app.add_service(container)
 		app.add_service(container2)
-		app.link(container, 'redis', container2, 'redis')
+
+		app.links.push(ServiceLink.new(
+			provider_name: container.name,
+			provider_port_name: 'redis',
+			consumer_name: container2.name,
+			consumer_port_name: 'redis'
+		))
+		app.save
 		app = CompositeService.find_by_id(app.id)
 
 		link = app.links[0]
@@ -108,7 +115,8 @@ describe CompositeService do
 
 		it 'can expose a port exposed by a service' do
 			# expose the redis provided service of the the redis container as 'redis'
-			@app.expose('redis', 'redis' => 'redis')
+			@app.provided_services['redis'] = { 'redis' => 'redis' }
+			@app.save
 			app = CompositeService.find_by_id(@app.id)
 			exposed = app.provided_services['redis']
 			expect(exposed).to_not be_nil

@@ -76,25 +76,6 @@ module TwistlockControl
 			result
 		end
 
-		# Example: forum_service.expose('http', {'RubyForum': 'http'})
-		def expose(provided_service_name, service)
-			provided_services[provided_service_name] = service
-			save
-		end
-
-		# Links two services together.
-		# Example: forum_service.expose('Redis', 'redis', 'RubyForum', 'redis')
-		# This makes the redis port of the Redis service available on the redis port
-		# of the RubyForum container.
-		def link(provider, provider_service_name, consumer, consumer_service_name)
-			links.push ServiceLink.new(
-				provider_name: provider.name,
-				provider_service_name: provider_service_name,
-				consumer_name: consumer.name,
-				consumer_service_name: consumer_service_name)
-			save
-		end
-
 		def serialize
 			super.merge! links: links.map(&:attributes)
 		end
