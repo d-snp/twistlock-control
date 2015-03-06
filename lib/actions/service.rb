@@ -3,13 +3,15 @@ module TwistlockControl
 	module Actions
 		#  * Defining services
 		module Service
-			def self.add
-			end
+			class << self
+				def add
+				end
 
-			def self.update
-			end
+				def update
+				end
 
-			def self.remove
+				def remove
+				end
 			end
 		end
 	end

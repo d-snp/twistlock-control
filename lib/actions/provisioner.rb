@@ -3,13 +3,15 @@ module TwistlockControl
 	module Actions
 		#  * Adding provisioners
 		module Provisioner
-			def self.add
-			end
+			class << self
+				def add
+				end
 
-			def self.update
-			end
+				def update
+				end
 
-			def self.remove
+				def remove
+				end
 			end
 		end
 	end
