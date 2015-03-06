@@ -10,7 +10,7 @@ Given(/^a provisioner is configured$/) do
 end
 
 Given(/^(?:a|the) user has created an instance of that service$/) do
-	@service_instance = @service.create_instance('my-instance')
+	@service_instance = TwistlockControl::Actions::ServiceInstance.add('my-instance', @service)
 end
 
 Then(/^(?:a|the) user should be presented with a configurable representation of the service$/) do
@@ -25,7 +25,7 @@ When(/^(?:a|the) user gives the provision command$/) do
 	api_double = double
 	expect(api_double).to receive(:provision_container).and_return({})
 	expect(@provisioner).to receive(:api).and_return(api_double)
-	@service_instance.provision
+	TwistlockControl::Actions::ContainerInstance.add(@container_configuration)
 end
 
 Then(/^a container instance should be provisioned$/) do

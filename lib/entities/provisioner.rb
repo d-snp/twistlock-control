@@ -9,25 +9,14 @@ module TwistlockControl
 		attribute :name, String
 		attribute :url, String
 
-		# Provision takes a ContainerConfiguration and when
-		# it is done provisioning it will notify the ContainerConfiguration
-		# of the ip address and container id of the provisioned container.
-		def provision(container_configuration)
-			instance = ContainerInstance.new(api.provision_container(container_configuration))
-			instance.save
-			instance
+		def self.api
+			@api ||= ProvisionerAPI.new(url)
 		end
 
-		def container_description(name)
-			api.container_description(name)
-		end
+		private
 
 		def generate_id
 			Digest::SHA256.hexdigest(url)
-		end
-
-		def api
-			@api ||= ProvisionerAPI.new(url)
 		end
 	end
 end

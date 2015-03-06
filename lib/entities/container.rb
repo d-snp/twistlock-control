@@ -49,18 +49,16 @@ module TwistlockControl
 			description.consumed_services
 		end
 
-		def generate_id
-			Digest::SHA256.hexdigest(url)
-		end
-
 		def serialize
 			super.merge!(
 				description: description ? description.serialize : nil
 			)
 		end
 
-		def self.all
-			ServiceRepository.containers.map { |a| new(a) }
+		private
+
+		def generate_id
+			Digest::SHA256.hexdigest(url)
 		end
 	end
 end

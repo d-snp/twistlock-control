@@ -24,10 +24,6 @@ module TwistlockControl
 		attribute :mount_points
 		attribute :environment_variables
 
-		def provision
-			@container_instance_id = provisioner.provision(self).id
-		end
-
 		def provisioner
 			@provisioner ||= Provisioner.find_by_id(provisioner_id)
 		end

@@ -3,13 +3,18 @@ module TwistlockControl
 	module Actions
 		#  * Importing container descriptions
 		module Container
-			def self.add
+			def self.add(properties)
+				container = TwistlockControl::Container.new(properties)
+				synchronize_description(container)
+				container
 			end
 
 			def self.update
+				fail 'not implemented'
 			end
 
 			def self.remove
+				fail 'not implemented'
 			end
 
 			def self.synchronize_description(container)

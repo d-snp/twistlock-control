@@ -3,10 +3,6 @@ module TwistlockControl
 	class Service < PersistedEntity
 		repository RethinkDBRepository['services']
 
-		def create_instance(name)
-			ServiceInstance.create(name, self)
-		end
-
 		def self.deserialize(attrs)
 			return nil if attrs.nil?
 

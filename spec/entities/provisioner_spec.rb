@@ -7,7 +7,7 @@ describe TwistlockControl::Provisioner do
 		container = TwistlockControl::Container.new(name: 'MyContainer', url: 'someUrl')
 		container.save
 
-		service_instance = TwistlockControl::ServiceInstance.create('myServiceInstance', container)
+		service_instance = TwistlockControl::Actions::ServiceInstance.add('myServiceInstance', container)
 
 		configuration = service_instance.container_configurations.first
 		configuration.provisioner = prov
@@ -18,7 +18,7 @@ describe TwistlockControl::Provisioner do
 			.with(configuration)
 			.and_return(container_id: 'abcd', ip_address: '127.0.0.1')
 
-		configuration.provision # returns instance
+		TwistlockControl::Actions::ContainerInstance.add(configuration)
 		service_instance.save
 	end
 

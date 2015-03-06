@@ -3,14 +3,13 @@ require 'spec_helper'
 describe TwistlockControl::Actions::Container do
 	attr_reader :container
 
-	before :each do
-		dir = Dir.pwd + '/../redis-container'
-		@container = TwistlockControl::Container.new(name: 'redis', url: dir)
-	end
+	describe 'adding a container' do
+		it 'should persist the container and synchronize its description' do
+			dir = Dir.pwd + '/../redis-container'
+			container = TwistlockControl::Actions::Container.add(name: 'redis', url: dir)
 
-	describe 'synchronizing the description' do
-		it 'should be able to get a description' do
-			TwistlockControl::Actions::Container.synchronize_description(container)
+			container = TwistlockControl::Container.find_by_id(container.id)
+			expect(container.url).to eq(dir)
 			expect(container.description).to be_a(ContainerDescription)
 			expect(container.description.name).to eq('redis')
 		end

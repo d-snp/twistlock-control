@@ -10,58 +10,10 @@ describe TwistlockControl::ServiceInstance do
 		service
 	end
 
-	# The user creates a service instance to prepare for provisioning
-	# a service
-	describe 'Creating a service instance' do
-		def verify_service_instance(service, instance)
-			expect(instance.configuration).to be_a(TwistlockControl::CompositeConfiguration)
-			expect(instance.configuration.service_id).to eq(service.id)
-			verify_configurations(instance.configuration.configurations)
-			true
-		end
-
-		def verify_configurations(configurations)
-			expect(configurations.length).to eq(1)
-			expect(configurations[0]).to be_a(TwistlockControl::ContainerConfiguration)
-			expect(configurations[0].service_id).to eq(@container.id)
-		end
-
-		it 'should create a service instance that has container descriptions
-		    for each container of the service template' do
-			service = make_service
-			instance = service.create_instance('my-instance')
-			expect(verify_service_instance(service, instance)).to be(true)
-		end
-
-		it 'should be possible to retrieve a service instance from persistent storage' do
-			service = make_service
-			instance = service.create_instance('my-instance')
-			instance.save
-
-			instance = TwistlockControl::ServiceInstance.find_by_id(instance.id)
-			expect(instance).to_not be(nil)
-			expect(verify_service_instance(service, instance)).to be(true)
-		end
-	end
-
-	# So the idea is that we create a service instance and that service
-	# instance will have a tree of configuration objects, one leaf for
-	# each container. We will iterate over the containers and ask the user to assign a provider for each container.
-	#
-	# After that the system will attempt to provision all the containers. When
-	# a container comes online the system will look through its desire links
-	# and establish them if possible.
-
-	describe 'Setting an instance up for provisioning' do
-		describe 'we should be able to provision a service instance' do
-			pending 'how do we want to test this?'
-		end
-	end
-
 	describe '#serialize' do
 		def make_serialized
 			service = make_service
-			instance = service.create_instance('my-instance')
+			instance = TwistlockControl::Actions::ServiceInstance.add('my-instance', service)
 			instance.serialize
 		end
 

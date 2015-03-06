@@ -97,34 +97,6 @@ module TwistlockControl
 		# be deduced from the link information whether the link is remote or local, so
 		# the system can decide if it has to go through an ambassador.
 
-		def generate_id
-			name
-		end
-
-		def self.create(name, service)
-			configuration = build_configuration(service)
-			instance = new(service_id: service.id, name: name, configuration: configuration)
-			instance.save
-			instance
-		end
-
-		def self.build_configuration(service)
-			case service.service_type
-			when :container then ContainerConfiguration.new(service_id: service.id)
-			when :composite
-				CompositeConfiguration.new(
-					service_id: service.id,
-					configurations: service.services.map { |s| build_configuration(s) }
-				)
-			else
-				fail "Unknown service type: #{service.service_type}"
-			end
-		end
-
-		def provision
-			container_configurations.map(&:provision)
-		end
-
 		def container_configurations
 			configuration.container_configurations
 		end
@@ -137,6 +109,12 @@ module TwistlockControl
 			serialized = attributes.dup
 			serialized[:configuration] = configuration.serialize
 			serialized
+		end
+
+		private
+
+		def generate_id
+			name
 		end
 	end
 end
