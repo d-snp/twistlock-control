@@ -4,13 +4,21 @@ module TwistlockControl
 		#  * Adding provisioners
 		module Provisioner
 			class << self
-				def add
+				def add(properties)
+					provisioner = Provisioner.new(properties)
+					provisioner.save
 				end
 
-				def update
+				def update(id, properties)
+					provisioner = Provisioner.find_by_id(id)
+					properties.each do |k, v|
+						properties.attributes[k] = v
+					end
+					provisioner.save
 				end
 
-				def remove
+				def remove(id)
+					Provisioner.delete(id)
 				end
 			end
 		end
