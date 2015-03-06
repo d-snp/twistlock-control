@@ -10,8 +10,8 @@ describe CompositeService do
 		service = CompositeService.new(name: 'MyService')
 		service.save
 		app = CompositeService.new(name: 'MyName')
+		app.service_relations[service.name] = service.id
 		app.save
-		app.add_service(service)
 		expect(app.services).to include(service)
 		app = CompositeService.find_by_id(app.id)
 		expect(app.services).to include(service)
@@ -21,8 +21,8 @@ describe CompositeService do
 		container = Container.new(name: 'MyContainer', url: 'someUrl')
 		container.save
 		app = CompositeService.new(name: 'MyName')
+		app.service_relations[container.name] = container.id
 		app.save
-		app.add_service(container)
 		app = CompositeService.find_by_id(app.id)
 		expect(app.services).to include(container)
 	end
@@ -34,8 +34,8 @@ describe CompositeService do
 		container2.save
 		app = CompositeService.new(name: 'WebApp')
 		app.save
-		app.add_service(container)
-		app.add_service(container2)
+		app.service_relations[container.name] = container.id
+		app.service_relations[container2.name] = container2.id
 
 		app.links.push(ServiceLink.new(
 			provider_name: container.name,
@@ -110,7 +110,7 @@ describe CompositeService do
 			@container2.save
 			@app = CompositeService.new(name: 'WebApp')
 			@app.save
-			@app.add_service(@container)
+			@app.service_relations[@container.name] = @container.name
 		end
 
 		it 'can expose a port exposed by a service' do

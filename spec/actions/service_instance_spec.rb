@@ -4,9 +4,9 @@ describe TwistlockControl::Actions::ServiceInstance do
 	def make_service
 		service = TwistlockControl::CompositeService.new(name: 'MyService')
 		@container = TwistlockControl::Container.new(name: 'MyContainer', url: 'someUrl')
-		service.save
 		@container.save
-		service.add_service(@container)
+		service.service_relations[@container.name] = @container.id
+		service.save
 		service
 	end
 

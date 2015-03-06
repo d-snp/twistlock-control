@@ -59,11 +59,6 @@ module TwistlockControl
 			Service.find_with_ids(service_relations.values)
 		end
 
-		def add_service(service, name = nil)
-			service_relations[name || service.name] = service.id
-			save
-		end
-
 		def containers
 			result = []
 			services = self.services.map(&:service)
