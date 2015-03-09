@@ -5,20 +5,19 @@ module TwistlockControl
 		module Provisioner
 			class << self
 				def add(properties)
-					provisioner = Provisioner.new(properties)
+					provisioner = TwistlockControl::Provisioner.new(properties)
 					provisioner.save
+					provisioner
 				end
 
 				def update(id, properties)
-					provisioner = Provisioner.find_by_id(id)
-					properties.each do |k, v|
-						properties.attributes[k] = v
-					end
+					provisioner = TwistlockControl::Provisioner.find_by_id(id)
+					provisioner.attributes = provisioner.attributes.merge properties
 					provisioner.save
 				end
 
 				def remove(id)
-					Provisioner.delete(id)
+					TwistlockControl::Provisioner.delete(id)
 				end
 			end
 		end
