@@ -6,6 +6,7 @@ require_relative 'twistlock_control/rethinkdb_repository'
 
 require_relative 'twistlock_control/entities'
 require_relative 'twistlock_control/actions'
+require_relative 'twistlock_control/collections'
 
 #
 # TwistLockControl main module.
