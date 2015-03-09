@@ -1,24 +1,11 @@
 require 'connection_pool'
 require 'rethinkdb'
 
-require 'provisioner_api'
+require_relative 'twistlock_control/provisioner_api'
+require_relative 'twistlock_control/rethinkdb_repository'
 
-require 'rethinkdb_repository'
-
-require 'entity'
-require 'entities/provisioning_configuration'
-require 'entities/service'
-require 'entities/provisioner'
-require 'entities/composite_service'
-require 'entities/service_instance'
-require 'entities/container'
-require 'entities/container_instance'
-
-require 'actions/container'
-require 'actions/container_instance'
-require 'actions/provisioner'
-require 'actions/service'
-require 'actions/service_instance'
+require_relative 'twistlock_control/entities'
+require_relative 'twistlock_control/actions'
 
 #
 # TwistLockControl main module.
