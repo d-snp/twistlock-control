@@ -12,7 +12,7 @@ module TwistlockControl
 					# without polluting the entities with logic
 					provisioner = container_configuration.provisioner.api
 					properties = provisioner.provision_container(container_configuration)
-					instance = TwistlockControl::ContainerInstance.new(properties)
+					instance = Entities::ContainerInstance.new(properties)
 					instance.save
 					instance
 				end

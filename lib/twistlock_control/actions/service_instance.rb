@@ -7,7 +7,7 @@ module TwistlockControl
 			class << self
 				def add(name, service)
 					configuration = build_configuration(service)
-					instance = TwistlockControl::ServiceInstance.new(service_id: service.id, name: name, configuration: configuration)
+					instance = Entities::ServiceInstance.new(service_id: service.id, name: name, configuration: configuration)
 					instance.save
 					instance
 				end
@@ -24,9 +24,9 @@ module TwistlockControl
 
 				def build_configuration(service)
 					case service.service_type
-					when :container then ContainerConfiguration.new(service_id: service.id)
+					when :container then Entities::ContainerConfiguration.new(service_id: service.id)
 					when :composite
-						CompositeConfiguration.new(
+						Entities::CompositeConfiguration.new(
 							service_id: service.id,
 							configurations: service.services.map { |s| build_configuration(s) }
 						)

@@ -12,7 +12,7 @@ describe Actions::Provisioner do
 
 		it 'can be persisted and retrieved from the database' do
 			prov = Actions::Provisioner.add(name: 'MyName', url: 'url')
-			retrieved = TwistlockControl::Provisioner.find_by_id(prov.id)
+			retrieved = Entities::Provisioner.find_by_id(prov.id)
 			expect(retrieved).to eq(prov)
 		end
 	end
@@ -21,7 +21,7 @@ describe Actions::Provisioner do
 		it 'updates a provisioner and persists it' do
 			prov = Actions::Provisioner.add(name: 'MyName', url: 'url')
 			Actions::Provisioner.update(prov.id, name: 'MyNewName')
-			prov = TwistlockControl::Provisioner.find_by_id(prov.id)
+			prov = Entities::Provisioner.find_by_id(prov.id)
 			expect(prov.name).to eq('MyNewName')
 		end
 	end
@@ -30,7 +30,7 @@ describe Actions::Provisioner do
 		it 'removes provisioners' do
 			prov = Actions::Provisioner.add(name: 'MyName', url: 'url')
 			prov.remove
-			prov = TwistlockControl::Provisioner.find_by_id(prov.id)
+			prov = Entities::Provisioner.find_by_id(prov.id)
 			expect(prov).to be_nil
 		end
 	end

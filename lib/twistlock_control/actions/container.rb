@@ -5,7 +5,7 @@ module TwistlockControl
 		module Container
 			class << self
 				def add(properties)
-					container = TwistlockControl::Container.new(properties)
+					container = Entities::Container.new(properties)
 					synchronize_description(container)
 					container
 				end
@@ -33,7 +33,7 @@ module TwistlockControl
 						`git clone -n --depth=1 #{container.url} .`
 						`git checkout HEAD twistlock.yml`
 						result = `cat twistlock.yml && rm -rf #{dirname}`
-						ContainerDescription.new(YAML.load(result))
+						Entities::ContainerDescription.new(YAML.load(result))
 					end
 				end
 			end

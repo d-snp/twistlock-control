@@ -3,19 +3,19 @@ module TwistlockControl
 	module Collections
 		class << self
 			def provisioners
-				Provisioner.repository.table
+				Entities::Provisioner.repository.table
 			end
 
 			def services
-				Service.repository.table
+				Entities::Service.repository.table
 			end
 
 			def service_instances
-				ServiceInstance.repository.table
+				Entities::ServiceInstance.repository.table
 			end
 
 			def container_instances
-				ContainerInstance.repository.table
+				Entities::ContainerInstance.repository.table
 			end
 		end
 	end
