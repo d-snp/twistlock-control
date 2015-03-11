@@ -7,7 +7,7 @@ require 'twistlock_control/admin'
 require 'webmock/rspec'
 
 TwistlockControl.configure do |c|
-	c.database_name = 'test'
+	c.database_name = 'twistlock_control_test'
 end
 
 RSpec.configure do |config|
