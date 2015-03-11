@@ -1,3 +1,5 @@
+Style/AndOr:
+    Enabled: false
 Style/Tab:
     Enabled: false
 Style/IndentationWidth:

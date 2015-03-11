@@ -1,12 +1,12 @@
 require 'connection_pool'
 require 'rethinkdb'
 
-require_relative 'twistlock_control/provisioner_api'
-require_relative 'twistlock_control/rethinkdb_repository'
+require 'twistlock_control/provisioner_api'
+require 'twistlock_control/rethinkdb_repository'
 
-require_relative 'twistlock_control/entities'
-require_relative 'twistlock_control/actions'
-require_relative 'twistlock_control/collections'
+require 'twistlock_control/entities'
+require 'twistlock_control/actions'
+require 'twistlock_control/collections'
 
 #
 # TwistLockControl main module.
@@ -16,22 +16,41 @@ require_relative 'twistlock_control/collections'
 #
 module TwistlockControl
 	class << self
-		attr_accessor :connection_pool_size,
-		              :connection_pool_timeout,
-		              :rethinkdb_host,
-		              :rethinkdb_port,
-		              :database_name
+		Configuration = Struct.new(
+			:connection_pool_size,
+			:connection_pool_timeout,
+			:rethinkdb_host,
+			:rethinkdb_port,
+			:database_name
+		) do
+			def initialize(*args)
+				return super unless args.length == 1 and args.first.instance_of? Hash
+				args.first.each_pair do |k, v|
+					self[k] = v if respond_to? k
+				end
+			end
+		end
 
-		def configure
-			yield self
+		CONFIGURATION_DEFAULTS = {
+			connection_pool_size: 5,
+			connection_pool_timeout: 5,
+			rethinkdb_host: 'localhost',
+			rethinkdb_port: 28_015,
+			database_name: 'twistlock-control'
+		}
 
-			set_defaults
+		attr_reader :configuration
+
+		def configure(options = {})
+			@configuration = Configuration.new(CONFIGURATION_DEFAULTS.merge(options))
+
+			yield configuration if block_given?
 
 			setup_connection_pool
 		end
 
 		def database
-			RethinkDB::RQL.new.db(database_name)
+			RethinkDB::RQL.new.db(configuration.database_name)
 		end
 
 		def with_connection
@@ -42,22 +61,14 @@ module TwistlockControl
 
 		private
 
-		def set_defaults
-			@connection_pool_size ||= 5
-			@connection_pool_timeout ||= 5
-			@rethinkdb_host ||= 'localhost'
-			@rethinkdb_port ||= 28_015
-			@database_name ||= 'twistlock-control'
-		end
-
 		def setup_connection_pool
 			@connection_pool = ConnectionPool.new(
-				size:    connection_pool_size,
-				timeout: connection_pool_timeout
+				size:    configuration.connection_pool_size,
+				timeout: configuration.connection_pool_timeout
 			) do
 				RethinkDB::Connection.new(
-					host: rethinkdb_host,
-					port: rethinkdb_port
+					host: configuration.rethinkdb_host,
+					port: configuration.rethinkdb_port
 				)
 			end
 		end
